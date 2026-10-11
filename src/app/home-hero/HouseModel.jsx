@@ -2,10 +2,10 @@
 
 import { useMemo } from "react";
 import { RoundedBox } from "@react-three/drei";
-import { Shape } from "three";
+import { DoubleSide, Quaternion, Shape, Vector3 } from "three";
 
 const palette = {
-  plaster: "#f1eee5",
+  plaster: "#d2c5af",
   trim: "#d2d3ce",
   metal: "#303d42",
   glass: "#86aeb3",
@@ -22,6 +22,96 @@ function Box({ size, color, radius = 0.012, roughness = 0.7, metalness = 0, ...p
 
 function Cylinder({ size, color, metalness = 0, ...props }) {
   return <mesh castShadow receiveShadow {...props}><cylinderGeometry args={[...size, 24]} /><meshStandardMaterial color={color} roughness={0.5} metalness={metalness} /></mesh>;
+}
+
+function Beam({ from, to, radius = 0.025, color }) {
+  const { length, position, quaternion } = useMemo(() => {
+    const start = new Vector3(...from);
+    const end = new Vector3(...to);
+    const direction = end.clone().sub(start);
+    return { length: direction.length(), position: start.add(end).multiplyScalar(0.5), quaternion: new Quaternion().setFromUnitVectors(new Vector3(0, 1, 0), direction.normalize()) };
+  }, [from, to]);
+  return <Cylinder size={[radius, radius, length]} color={color} position={position} quaternion={quaternion} />;
+}
+
+function PlasterPatch({ points, color = "#baa88e", ...props }) {
+  const shape = useMemo(() => {
+    const outline = new Shape();
+    points.forEach(([x, y], index) => index ? outline.lineTo(x, y) : outline.moveTo(x, y));
+    outline.closePath();
+    return outline;
+  }, [points]);
+  return <mesh receiveShadow {...props}><shapeGeometry args={[shape]} /><meshStandardMaterial color={color} roughness={0.98} side={DoubleSide} /></mesh>;
+}
+
+function Crack({ points, ...props }) {
+  return <group {...props}>{points.slice(1).map((point, index) => <Beam key={index} from={[...points[index], 0]} to={[...point, 0]} radius={0.009} color="#867969" />)}</group>;
+}
+
+function FacadeRepairs() {
+  return <group>
+    {/* A fresh coat surrounds the lower window; the uneven edge is still being rolled. */}
+    <PlasterPatch position={[-1.88, 0.28, 0.963]} color="#f1eee5" points={[[0, 0], [1.22, 0], [1.22, 0.98], [1.18, 1.02], [1.22, 1.13], [1.17, 1.22], [1.2, 1.46], [0.76, 1.46], [0.68, 1.54], [0.36, 1.51], [0.27, 1.46], [0, 1.48]]} />
+    <PlasterPatch position={[-0.8, 1.75, 0.964]} points={[[0, 0], [0.2, -0.05], [0.45, 0.03], [0.68, -0.02], [0.84, 0.12], [0.71, 0.22], [0.51, 0.17], [0.25, 0.24], [0.1, 0.15]]} />
+    <PlasterPatch position={[-0.7, 2.49, 0.964]} points={[[0, 0], [0.07, -0.19], [0.22, -0.26], [0.31, -0.15], [0.25, 0.02], [0.33, 0.17], [0.15, 0.24], [0.04, 0.16]]} />
+    <Crack position={[-0.62, 2.8, 0.969]} points={[[0, 0.27], [-0.06, 0.12], [0.02, 0.03], [-0.08, -0.13], [-0.03, -0.3]]} />
+    <Crack position={[-0.7, 2.67, 0.969]} points={[[0, 0], [-0.14, -0.06], [-0.17, -0.18]]} />
+    {/* Exposed masonry at the entry is being patched before painting. */}
+    <PlasterPatch position={[0.36, 0.35, 0.964]} color="#b18c73" points={[[0, 0], [0.31, -0.02], [0.35, 0.12], [0.28, 0.19], [0.34, 0.32], [0.21, 0.43], [0.08, 0.39], [-0.04, 0.26], [0.02, 0.16]]} />
+    {[0.08, 0.2, 0.32].map((y) => <Box key={y} size={[0.24, 0.012, 0.008]} position={[0.51, 0.35 + y, 0.971]} color="#d8c9b7" radius={0.002} />)}
+    {[0.14, 0.26].map((y, index) => <Box key={y} size={[0.012, 0.11, 0.008]} position={[index ? 0.56 : 0.46, 0.35 + y, 0.971]} color="#d8c9b7" radius={0.002} />)}
+    <group position={[0.784, 0, 0]} rotation={[0, Math.PI / 2, 0]}>
+      <PlasterPatch position={[-0.18, 1.78, 0]} points={[[0, 0], [0.23, -0.08], [0.46, 0.02], [0.67, -0.04], [0.78, 0.15], [0.62, 0.3], [0.38, 0.23], [0.17, 0.33], [-0.04, 0.17]]} />
+      <Crack position={[0.37, 2.72, 0.006]} points={[[0, 0.23], [0.05, 0.1], [-0.04, 0], [0.03, -0.18]]} />
+    </group>
+    <group position={[2.585, 0, -0.1]} rotation={[0, Math.PI / 2, 0]}>
+      <PlasterPatch position={[-0.53, 0.27, 0]} color="#baa991" points={[[0, 0], [0.37, -0.06], [0.65, 0.03], [0.78, 0.14], [0.66, 0.29], [0.37, 0.23], [0.19, 0.31], [-0.05, 0.18]]} />
+      <Crack position={[0.42, 1.21, 0.006]} points={[[0, 0.16], [-0.09, 0.04], [-0.05, -0.11], [-0.14, -0.26]]} />
+    </group>
+    <group position={[-0.55, 0, -1.563]} rotation={[0, Math.PI, 0]}>
+      <PlasterPatch position={[-0.5, 1.75, 0]} points={[[0, 0], [0.39, -0.05], [0.65, 0.06], [0.9, 0], [1.04, 0.19], [0.73, 0.28], [0.49, 0.23], [0.25, 0.32], [-0.06, 0.17]]} />
+      <Crack position={[0, 2.7, 0.006]} points={[[0, 0.25], [-0.08, 0.12], [0.03, 0.01], [-0.05, -0.15]]} />
+    </group>
+    <group position={[-1.884, 0, -0.1]} rotation={[0, -Math.PI / 2, 0]}>
+      <PlasterPatch position={[-0.3, 0.35, 0]} points={[[0, 0], [0.31, -0.08], [0.48, 0.03], [0.57, 0.21], [0.39, 0.36], [0.19, 0.26], [-0.06, 0.14]]} />
+      <Crack position={[-0.26, 2.83, 0.006]} points={[[0, 0.14], [0.11, 0], [0.04, -0.12], [0.09, -0.25]]} />
+    </group>
+  </group>;
+}
+
+function Painter() {
+  const skin = "#c18d66";
+  const workwear = "#127b7a";
+  return <group position={[-1.5, 0.17, 1.93]}>
+    {/* Feet planted apart, shoulders facing the facade, both hands guiding the roller. */}
+    <Box size={[0.14, 0.1, 0.24]} color="#344343" position={[-0.13, 0.045, 0.025]} radius={0.025} />
+    <Box size={[0.14, 0.1, 0.24]} color="#344343" position={[0.14, 0.045, -0.08]} radius={0.025} />
+    <Beam from={[-0.13, 0.1, 0.04]} to={[-0.11, 0.35, 0.01]} radius={0.065} color="#365d61" />
+    <Beam from={[-0.11, 0.35, 0.01]} to={[-0.09, 0.62, 0]} radius={0.072} color="#365d61" />
+    <Beam from={[0.14, 0.1, -0.08]} to={[0.11, 0.36, -0.1]} radius={0.065} color="#365d61" />
+    <Beam from={[0.11, 0.36, -0.1]} to={[0.09, 0.62, 0]} radius={0.072} color="#365d61" />
+    <Box size={[0.32, 0.19, 0.21]} color="#365d61" position={[0, 0.62, 0]} radius={0.055} />
+    <Box size={[0.36, 0.4, 0.23]} color={workwear} position={[0, 0.88, -0.02]} rotation={[-0.09, 0, 0]} radius={0.085} />
+    <Box size={[0.035, 0.33, 0.015]} color="#9cb8ab" position={[-0.09, 0.9, 0.102]} radius={0.006} />
+    <Box size={[0.035, 0.33, 0.015]} color="#9cb8ab" position={[0.09, 0.9, 0.102]} radius={0.006} />
+    <Box size={[0.14, 0.11, 0.02]} color="#366466" position={[0, 0.8, 0.111]} radius={0.012} />
+    <Cylinder size={[0.06, 0.06, 0.12]} color={skin} position={[0, 1.1, -0.04]} />
+    <mesh position={[0, 1.23, -0.055]} scale={[0.88, 1.1, 0.94]} castShadow><sphereGeometry args={[0.12, 20, 16]} /><meshStandardMaterial color={skin} roughness={0.85} /></mesh>
+    <Box size={[0.045, 0.065, 0.04]} color={skin} position={[0, 1.23, -0.174]} radius={0.015} />
+    <mesh position={[0, 1.31, -0.055]} castShadow><sphereGeometry args={[0.14, 24, 12, 0, Math.PI * 2, 0, Math.PI / 2]} /><meshStandardMaterial color="#d9af57" roughness={0.6} /></mesh>
+    <Cylinder size={[0.163, 0.163, 0.028]} color="#d9af57" position={[0, 1.313, -0.065]} />
+    <Box size={[0.025, 0.045, 0.2]} color="#e7c67f" position={[0, 1.432, -0.055]} radius={0.014} />
+    <Beam from={[0.17, 1, -0.04]} to={[0.29, 1.1, -0.23]} radius={0.063} color={workwear} />
+    <Beam from={[0.29, 1.1, -0.23]} to={[0.42, 1.3, -0.5]} radius={0.046} color={skin} />
+    <Beam from={[-0.17, 1, -0.04]} to={[-0.09, 0.91, -0.24]} radius={0.063} color={workwear} />
+    <Beam from={[-0.09, 0.91, -0.24]} to={[0.3, 1.1, -0.33]} radius={0.046} color={skin} />
+    <Box size={[0.09, 0.11, 0.085]} color="#e0ceb0" position={[0.42, 1.3, -0.5]} radius={0.027} />
+    <Box size={[0.09, 0.11, 0.085]} color="#e0ceb0" position={[0.3, 1.1, -0.33]} radius={0.027} />
+    <Beam from={[0.22, 0.96, -0.22]} to={[0.48, 1.53, -0.88]} radius={0.018} color="#889a94" />
+    <Beam from={[0.48, 1.53, -0.88]} to={[0.48, 1.64, -0.95]} radius={0.013} color="#889a94" />
+    <Beam from={[0.48, 1.64, -0.95]} to={[0.36, 1.64, -0.95]} radius={0.013} color="#889a94" />
+    <Cylinder size={[0.07, 0.07, 0.35]} color="#f1eee5" position={[0.31, 1.64, -0.95]} rotation={[0, 0, Math.PI / 2]} />
+  </group>;
 }
 
 function Glazing({ position, rotation = [0, 0, 0], width = 0.77, height = 0.93, panes = 2 }) {
@@ -106,7 +196,7 @@ function Architecture() {
     <WallLight position={[0.65, 1.27, -1.61]} rotation={[0, Math.PI, 0]} />
 
     {/* Attached garage with a sectional door and a metal coping. */}
-    <Box size={[1.8, 1.36, 2.3]} color="#e5e5de" position={[1.68, 0.85, -0.25]} />
+    <Box size={[1.8, 1.36, 2.3]} color="#d5cab6" position={[1.68, 0.85, -0.25]} />
     <Box size={[1.94, 0.12, 2.45]} color={palette.metal} position={[1.68, 1.56, -0.25]} />
     <Box size={[1.75, 0.025, 2.24]} color="#647073" position={[1.68, 1.635, -0.25]} radius={0.006} />
     <Box size={[1.54, 1.17, 0.065]} color="#34484c" position={[1.68, 0.8, 0.935]} />
@@ -120,7 +210,22 @@ function Architecture() {
 function Car() {
   return <group position={[1.7, 0.12, 2.07]}>
     <Box size={[0.94, 0.29, 1.79]} position={[0, 0.37, 0]} color="#2c7276" radius={0.11} roughness={0.25} metalness={0.55} />
-    <Box size={[0.83, 0.12, 1.55]} position={[0, 0.52, -0.01]} color="#3b8285" radius={0.05} roughness={0.22} metalness={0.55} />
+    <Box size={[0.83, 0.12, 0.99]} position={[0, 0.52, -0.29]} color="#3b8285" radius={0.05} roughness={0.22} metalness={0.55} />
+    {[-1, 1].map((side) => <Box key={side} size={[0.085, 0.12, 0.56]} position={[side * 0.39, 0.52, 0.63]} color="#3b8285" radius={0.025} roughness={0.22} metalness={0.55} />)}
+    {/* Raised hood, recessed engine bay, battery, radiator, and a visible engine block. */}
+    <Box size={[0.71, 0.022, 0.51]} position={[0, 0.529, 0.63]} color="#253638" radius={0.015} />
+    <Box size={[0.33, 0.13, 0.29]} position={[0.025, 0.595, 0.61]} color="#6b7b7a" radius={0.025} metalness={0.5} />
+    {[-0.09, -0.03, 0.03, 0.09].map((x) => <Box key={x} size={[0.025, 0.022, 0.24]} position={[x + 0.025, 0.67, 0.61]} color="#aab6b0" radius={0.005} metalness={0.65} />)}
+    <Box size={[0.16, 0.105, 0.17]} position={[-0.245, 0.59, 0.72]} color="#3b4443" radius={0.012} />
+    {[-0.29, -0.2].map((x, index) => <Box key={x} size={[0.035, 0.025, 0.035]} position={[x, 0.655, 0.72]} color={index ? "#bd7257" : "#b7bdb6"} radius={0.004} metalness={0.5} />)}
+    <Box size={[0.61, 0.09, 0.045]} position={[0, 0.58, 0.86]} color="#87968f" radius={0.01} metalness={0.6} />
+    <Beam from={[0.2, 0.615, 0.55]} to={[0.27, 0.575, 0.81]} radius={0.023} color="#253638" />
+    <group position={[0, 0.6, 0.4]} rotation={[-1.08, 0, 0]}>
+      <Box size={[0.78, 0.055, 0.55]} position={[0, 0, 0.275]} color="#3b8285" radius={0.035} roughness={0.25} metalness={0.55} />
+      <Box size={[0.65, 0.016, 0.42]} position={[0, -0.036, 0.28]} color="#35585b" radius={0.02} />
+      <Box size={[0.035, 0.015, 0.36]} position={[0, -0.052, 0.28]} color="#587578" radius={0.006} metalness={0.4} />
+    </group>
+    <Beam from={[-0.32, 0.57, 0.76]} to={[-0.32, 1, 0.62]} radius={0.009} color="#a0aea7" />
     <Box size={[0.75, 0.34, 0.88]} position={[0, 0.69, -0.09]} color="#263a43" radius={0.085} roughness={0.13} metalness={0.4} />
     <Box size={[0.69, 0.06, 0.77]} position={[0, 0.86, -0.1]} color="#368085" radius={0.025} roughness={0.22} metalness={0.55} />
     <Box size={[0.64, 0.26, 0.035]} position={[0, 0.71, 0.35]} rotation={[-0.28, 0, 0]} color="#90b2ba" radius={0.025} roughness={0.12} metalness={0.5} />
@@ -143,8 +248,51 @@ function Car() {
   </group>;
 }
 
+function Mechanic() {
+  const workwear = "#385762";
+  const sleeves = "#438b89";
+  const skin = "#a97552";
+  return <group position={[2.64, 0.17, 2.64]} rotation={[0, Math.PI / 2, 0]}>
+    {/* A second worker bends over the engine from the passenger side. */}
+    <Box size={[0.14, 0.1, 0.24]} position={[-0.14, 0.045, 0.04]} color="#344343" radius={0.025} />
+    <Box size={[0.14, 0.1, 0.24]} position={[0.15, 0.045, -0.015]} color="#344343" radius={0.025} />
+    <Beam from={[-0.14, 0.1, 0.04]} to={[-0.11, 0.34, 0.08]} radius={0.065} color={workwear} />
+    <Beam from={[-0.11, 0.34, 0.08]} to={[-0.09, 0.62, -0.035]} radius={0.072} color={workwear} />
+    <Beam from={[0.15, 0.1, -0.015]} to={[0.13, 0.34, 0.07]} radius={0.065} color={workwear} />
+    <Beam from={[0.13, 0.34, 0.07]} to={[0.09, 0.62, -0.035]} radius={0.072} color={workwear} />
+    <Box size={[0.32, 0.18, 0.21]} position={[0, 0.62, -0.035]} color={workwear} radius={0.055} />
+    <Box size={[0.36, 0.4, 0.23]} position={[0, 0.84, -0.16]} rotation={[-0.6, 0, 0]} color={sleeves} radius={0.085} />
+    <group position={[0, 0.84, -0.16]} rotation={[-0.6, 0, 0]}>
+      <Box size={[0.24, 0.27, 0.025]} position={[0, -0.01, 0.118]} color={workwear} radius={0.018} />
+      {[-0.085, 0.085].map((x) => <Box key={x} size={[0.03, 0.35, 0.018]} position={[x, 0.01, 0.132]} color="#8ba6a0" radius={0.005} />)}
+    </group>
+    <Beam from={[0, 1.01, -0.275]} to={[0, 1.09, -0.36]} radius={0.056} color={skin} />
+    <group position={[0, 1.14, -0.42]} rotation={[-0.32, 0, 0]}>
+      <mesh scale={[0.88, 1.1, 0.94]} castShadow><sphereGeometry args={[0.12, 20, 16]} /><meshStandardMaterial color={skin} roughness={0.85} /></mesh>
+      <Box size={[0.045, 0.065, 0.04]} position={[0, -0.005, -0.119]} color={skin} radius={0.015} />
+      <mesh position={[0, 0.073, 0]} castShadow><sphereGeometry args={[0.125, 20, 12, 0, Math.PI * 2, 0, Math.PI / 2]} /><meshStandardMaterial color={workwear} roughness={0.9} /></mesh>
+      <Box size={[0.19, 0.025, 0.13]} position={[0, 0.076, -0.105]} color={workwear} radius={0.016} />
+    </group>
+    {[-1, 1].map((side) => <group key={side}>
+      <Beam from={[side * 0.17, 0.98, -0.25]} to={[side * 0.23, 0.83, -0.41]} radius={0.061} color={sleeves} />
+      <Beam from={[side * 0.23, 0.83, -0.41]} to={[side * 0.18, 0.54, -0.65]} radius={0.045} color={skin} />
+      <Box size={[0.085, 0.09, 0.09]} position={[side * 0.18, 0.54, -0.65]} color="#87978c" radius={0.024} />
+    </group>)}
+    <Beam from={[0.18, 0.52, -0.65]} to={[0.13, 0.49, -0.8]} radius={0.012} color="#c2ccc4" />
+    <mesh position={[0.13, 0.49, -0.8]} rotation={[Math.PI / 2, 0, 0]}><torusGeometry args={[0.033, 0.009, 8, 16, Math.PI * 1.6]} /><meshStandardMaterial color="#c2ccc4" metalness={0.75} roughness={0.3} /></mesh>
+    <group position={[-0.41, 0, 0.33]}>
+      <Box size={[0.43, 0.2, 0.28]} position={[0, 0.1, 0]} color="#a3634e" radius={0.025} />
+      <Box size={[0.45, 0.045, 0.3]} position={[0, 0.218, 0]} color="#b9785d" radius={0.012} />
+      <Box size={[0.08, 0.06, 0.012]} position={[0, 0.19, -0.155]} color="#bbc2b8" radius={0.005} metalness={0.65} />
+      <Beam from={[-0.095, 0.25, 0]} to={[-0.095, 0.3, 0]} radius={0.012} color="#344343" />
+      <Beam from={[0.095, 0.25, 0]} to={[0.095, 0.3, 0]} radius={0.012} color="#344343" />
+      <Beam from={[-0.095, 0.3, 0]} to={[0.095, 0.3, 0]} radius={0.018} color="#344343" />
+    </group>
+  </group>;
+}
+
 function PaintingEquipment() {
-  return <group position={[-2.17, 0.15, 0.62]}>
+  return <group position={[-2.17, 0.15, 1.87]}>
     <Cylinder size={[0.19, 0.16, 0.31]} color="#e5e4da" position={[0, 0.155, 0]} metalness={0.3} />
     <Cylinder size={[0.194, 0.194, 0.055]} color="#087c78" position={[0, 0.14, 0]} />
     <Cylinder size={[0.17, 0.17, 0.016]} color="#91c6ba" position={[0, 0.32, 0]} />
@@ -195,8 +343,8 @@ function Site() {
     <Planter position={[-1.42, 0.2, -2.03]} width={0.43} />
     <Planter position={[0.62, 0.2, -2.03]} width={0.43} />
     <Planter position={[0.51, 0.18, 1.19]} width={0.3} />
-    <Box size={[0.2, 0.61, 0.16]} color="#4d5e5b" position={[-0.98, 0.45, 2.76]} />
-    <Box size={[0.38, 0.2, 0.27]} color="#526862" position={[-0.98, 0.82, 2.76]} />
+    <Box size={[1.41, 0.012, 1.24]} color="#d4c8ad" position={[-1.72, 0.17, 1.91]} radius={0.005} />
+    {[[-2.05, 1.51, 0.08], [-1.83, 2.34, 0.055], [-1.25, 2.35, 0.04]].map(([x, z, radius]) => <mesh key={x} rotation={[-Math.PI / 2, 0, 0]} position={[x, 0.178, z]}><circleGeometry args={[radius, 12]} /><meshStandardMaterial color="#eeeade" roughness={0.95} /></mesh>)}
   </group>;
 }
 
@@ -204,7 +352,10 @@ export default function HouseModel() {
   return <group>
     <Site />
     <Architecture />
+    <FacadeRepairs />
+    <Painter />
     <Car />
+    <Mechanic />
     <PaintingEquipment />
     <CleaningEquipment />
   </group>;

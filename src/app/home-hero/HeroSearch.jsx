@@ -55,14 +55,15 @@ export default function HeroSearch() {
 
   return (
     <div ref={wrapRef} className={styles.wrap} onKeyDown={handleKeyDown} onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false); }}>
+      <label className={styles.searchLabel} htmlFor="hero-search-input">Was suchen Sie?</label>
       <form role="search" aria-label="Dienstleister suchen" className={styles.form} onSubmit={(event) => { event.preventDefault(); setOpen(hasQuery); inputRef.current?.focus(); }}>
-        <label className={styles.field}>
-          <span className="sr-only">Dienstleistung, Unternehmen oder Ort suchen</span>
+        <div className={styles.field}>
           <SearchIcon />
-          <input ref={inputRef} type="search" autoComplete="off" placeholder="Dienstleistung, Unternehmen oder Ort" value={query} aria-controls={open && hasQuery ? "hero-search-results" : undefined} onChange={(event) => { setQuery(event.target.value); setOpen(Boolean(event.target.value.trim())); }} onFocus={() => { if (hasQuery) setOpen(true); }} />
-        </label>
+          <input id="hero-search-input" ref={inputRef} type="search" autoComplete="off" enterKeyHint="search" placeholder="z. B. Malerarbeiten" aria-describedby="hero-search-hint" value={query} aria-controls={open && hasQuery ? "hero-search-results" : undefined} onChange={(event) => { setQuery(event.target.value); setOpen(Boolean(event.target.value.trim())); }} onFocus={() => { if (hasQuery) setOpen(true); }} />
+        </div>
         <button type="submit" className={styles.submit} aria-label="Suchen"><SearchIcon /><span>Suchen</span></button>
       </form>
+      <p id="hero-search-hint" className={styles.searchHint}>Dienstleistung, Unternehmen oder Ort eingeben.</p>
       {open && hasQuery && (
         <div id="hero-search-results" className={styles.results} role="region" aria-label="Suchergebnisse">
           <p className={styles.heading} role="status">{loading ? "Unternehmen werden geladen…" : `${count} Treffer`}</p>
