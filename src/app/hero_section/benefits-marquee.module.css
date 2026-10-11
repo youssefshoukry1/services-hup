@@ -1,0 +1,12 @@
+.wrap { width: 100%; margin-top: 2.5rem; }
+.viewport { overflow-x: auto; overflow-y: hidden; mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent); scrollbar-width: none; touch-action: pan-x; }
+.viewport::-webkit-scrollbar { display: none; }
+.track { display: flex; width: max-content; gap: 0.75rem; animation: glide 36s linear infinite; }
+.group { display: flex; flex: none; gap: 0.75rem; }
+.card { display: flex; width: 12.5rem; min-height: 4.1rem; flex: none; align-items: center; gap: 0.75rem; border: 1px solid #e5eeee; border-radius: 1rem; background: #fff; padding: 0.7rem 0.85rem; color: #263940; font-size: 0.78rem; font-weight: 800; box-shadow: 0 8px 22px -17px rgba(0, 80, 80, 0.35); }
+.icon { display: grid; width: 2.55rem; height: 2.55rem; flex: none; place-items: center; border-radius: 0.8rem; background: #eaf7f5; color: #008080; }
+.icon svg { width: 1.3rem; height: 1.3rem; }
+.viewport:hover .track, .viewport:active .track { animation-play-state: paused; }
+@keyframes glide { to { transform: translateX(calc(-50% - 0.375rem)); } }
+@media (min-width: 640px) { .wrap { margin-top: 3.25rem; } .card { width: 13.5rem; min-height: 4.5rem; font-size: 0.82rem; } }
+@media (prefers-reduced-motion: reduce) { .track { animation: none; } }

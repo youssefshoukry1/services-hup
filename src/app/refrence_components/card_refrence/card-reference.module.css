@@ -1,0 +1,97 @@
+.page {
+  display: grid;
+  min-height: 100svh;
+  place-items: center;
+  background: #fff;
+}
+
+.parent {
+  width: 300px;
+  padding: 20px;
+  perspective: 1000px;
+}
+
+.card {
+  position: relative;
+  width: 100%;
+  border: 3px solid #fff;
+  background: linear-gradient(135deg, transparent 18.75%, #f3f3f3 0 31.25%, transparent 0), repeating-linear-gradient(45deg, #f3f3f3 -6.25% 6.25%, #fff 0 18.75%);
+  background-color: #f0f0f0;
+  background-position: 0 0, 0 0;
+  background-size: 60px 60px;
+  padding-top: 50px;
+  box-shadow: rgba(142, 142, 142, 0.3) 0 30px 30px -10px;
+  transform-style: preserve-3d;
+  transition: all 0.5s ease-in-out;
+}
+
+.contentBox {
+  background: rgba(4, 193, 250, 0.73);
+  padding: 60px 25px 25px;
+  transform-style: preserve-3d;
+  transition: all 0.5s ease-in-out;
+}
+
+.cardTitle,
+.cardContent,
+.seeMore {
+  display: block;
+  transition: transform 0.5s ease-in-out;
+}
+
+.cardTitle {
+  color: #fff;
+  font-size: 25px;
+  font-weight: 900;
+  transform: translate3d(0, 0, 50px);
+}
+
+.cardContent {
+  margin-top: 10px;
+  color: #f2f2f2;
+  font-size: 12px;
+  font-weight: 700;
+  transform: translate3d(0, 0, 30px);
+}
+
+.seeMore {
+  width: fit-content;
+  margin-top: 1rem;
+  background: #fff;
+  padding: 0.5rem 0.7rem;
+  color: #07b9ff;
+  cursor: pointer;
+  font-size: 9px;
+  font-weight: 900;
+  text-transform: uppercase;
+  transform: translate3d(0, 0, 20px);
+}
+
+.dateBox {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  display: grid;
+  width: 60px;
+  height: 60px;
+  place-content: center;
+  border: 1px solid #07b9ff;
+  background: #fff;
+  color: #04c1fa;
+  text-align: center;
+  text-transform: uppercase;
+  transform: translate3d(0, 0, 80px);
+  box-shadow: rgba(100, 100, 111, 0.2) 0 17px 10px -10px;
+}
+
+.dateBox span { font-size: 9px; font-weight: 700; }
+.dateBox strong { font-size: 20px; font-weight: 900; }
+
+@media (hover: hover) and (pointer: fine) {
+  .card:hover { background-position: -100px 100px, -100px 100px; transform: rotate3d(0.5, 1, 0, 30deg); }
+  .cardTitle:hover, .cardContent:hover, .seeMore:hover { transform: translate3d(0, 0, 60px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card, .contentBox, .cardTitle, .cardContent, .seeMore { transition: none; }
+}

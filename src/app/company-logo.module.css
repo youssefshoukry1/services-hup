@@ -1,0 +1,11 @@
+.fallback {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 50%;
+  height: 50%;
+  max-width: 4.5rem;
+  max-height: 4.5rem;
+  transform: translate(-50%, -50%);
+  color: #008080;
+}

@@ -1,0 +1,22 @@
+.page { min-height: 100svh; background: #f4f9f8; color: #183138; padding: 2rem 1rem 5rem; }
+.brand { display: inline-block; color: #172e35; font-size: 1.25rem; font-weight: 900; letter-spacing: -.06em; }.brand span { color: #008080; }
+.eyebrow { margin-top: 1.5rem; color: #008080; font-size: .72rem; font-weight: 850; letter-spacing: .12em; text-transform: uppercase; }
+.page h1 { margin-top: .35rem; font-size: clamp(1.9rem, 5vw, 2.7rem); letter-spacing: -.045em; }
+.page p { line-height: 1.55; }.page a { overflow-wrap: anywhere; }
+.loginCard { width: min(100%, 430px); margin: 6vh auto; border: 1px solid #dceae8; border-radius: 1.2rem; background: #fff; padding: clamp(1.4rem, 5vw, 2.4rem); box-shadow: 0 20px 60px -45px #163638; }
+.loginCard > p:last-of-type, .header p:last-child { color: #61777d; font-size: .86rem; }
+.loginCard form { display: grid; gap: 1rem; margin-top: 1.8rem; }.loginCard label, .review label { display: grid; gap: .45rem; font-size: .8rem; font-weight: 800; }
+.loginCard input, .review textarea { width: 100%; border: 1px solid #cbdedc; border-radius: .65rem; background: #fff; padding: .75rem .85rem; color: #172e35; font: inherit; }
+.loginCard input:focus, .review textarea:focus { outline: 3px solid #b7e3dd; border-color: #008080; }
+.loginCard form button, .approve { min-height: 2.85rem; border-radius: .65rem; background: #008080; padding: .6rem 1rem; color: white; font-weight: 800; }.loginCard button:disabled, .actions button:disabled { opacity: .55; cursor: wait; }
+.error { margin: 1rem 0; border-radius: .6rem; background: #fff0ef; padding: .8rem; color: #9c2d29; font-size: .84rem; }
+.dashboard { width: min(100%, 1080px); margin: 0 auto; }.header { display: flex; justify-content: space-between; gap: 1.5rem; align-items: flex-start; }.header .eyebrow { margin-top: 1rem; }
+.account { display: flex; flex-direction: column; align-items: flex-end; gap: .5rem; color: #577077; font-size: .76rem; }.account button { border: 1px solid #b8d7d4; border-radius: .6rem; padding: .5rem .75rem; font-weight: 800; }
+.tabs { display: flex; gap: .5rem; overflow-x: auto; margin: 2rem 0 1.4rem; border-bottom: 1px solid #d4e5e2; }.tabs button { min-height: 2.8rem; border-bottom: 3px solid transparent; padding: .5rem .9rem; color: #526c72; font-weight: 800; white-space: nowrap; }.tabs button[aria-pressed=true] { border-color: #008080; color: #007472; }
+.empty { border: 1px dashed #b9d8d4; border-radius: .9rem; background: #fff; padding: 2rem; color: #5d7379; }.list { display: grid; gap: 1.2rem; }.company { border: 1px solid #dceae8; border-radius: 1rem; background: #fff; padding: clamp(1rem, 3vw, 1.5rem); box-shadow: 0 10px 35px -35px #183138; }
+.companyTop { display: flex; align-items: flex-start; gap: 1rem; }.logo { position: relative; width: 4rem; height: 4rem; flex: none; overflow: hidden; border: 1px solid #dceae8; border-radius: .7rem; background: #f4f8f7; }.logo img { width: 100%; height: 100%; object-fit: contain; }
+.category { color: #008080; font-size: .7rem; font-weight: 850; text-transform: uppercase; }.company h2 { margin: .15rem 0; font-size: 1.3rem; }.companyTop p { color: #546970; font-size: .86rem; }
+.details { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .9rem 1.5rem; margin: 1.3rem 0; }.details dt { color: #6e858b; font-size: .68rem; font-weight: 850; text-transform: uppercase; }.details dd { margin-top: .2rem; font-size: .86rem; }.details a { color: #007472; text-decoration: underline; }
+.company h3 { font-size: .88rem; }.prices { display: grid; gap: .5rem; margin: .7rem 0 1.2rem; }.prices li { display: flex; justify-content: space-between; gap: 1rem; border-top: 1px solid #edf3f2; padding-top: .5rem; font-size: .84rem; }
+.review { border-top: 1px solid #e4efed; padding-top: 1.2rem; }.review textarea { min-height: 5rem; resize: vertical; }.actions { display: flex; justify-content: flex-end; gap: .7rem; margin-top: .8rem; }.actions button { min-width: 7rem; font-size: .82rem; }.reject { border: 1px solid #d9aaaa; border-radius: .65rem; padding: .6rem 1rem; color: #a43c39; font-weight: 800; }.reviewed { border-top: 1px solid #e4efed; padding-top: .9rem; color: #60757b; font-size: .82rem; }
+@media (max-width: 650px) { .header { flex-direction: column; }.account { align-items: flex-start; }.details { grid-template-columns: 1fr; } }
