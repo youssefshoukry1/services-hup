@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { Component, useCallback, useEffect, useRef, useState } from "react";
 import HeroSearch from "./HeroSearch";
+import ScrambleBenefit from "./ScrambleBenefit";
 import styles from "./home-hero.module.css";
 
 function SceneFallback() {
@@ -137,9 +138,9 @@ export default function HomeHero() {
         </div>
       </div>
       <div className={styles.benefits}>
-        <span><b>01</b> Lokale Unternehmen entdecken</span>
-        <span><b>02</b> Passende Dienstleistung finden</span>
-        <span><b>03</b> Direkt ins Gespräch kommen</span>
+        <ScrambleBenefit number="01">Lokale Unternehmen entdecken</ScrambleBenefit>
+        <ScrambleBenefit number="02">Passende Dienstleistung finden</ScrambleBenefit>
+        <ScrambleBenefit number="03">Direkt ins Gespräch kommen</ScrambleBenefit>
       </div>
     </section>
   );

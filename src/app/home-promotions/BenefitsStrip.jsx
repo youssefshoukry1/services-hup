@@ -1,59 +1,40 @@
 "use client";
 
-import { Fragment, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./home-promotions.module.css";
-
-function AnimatedTitle({ text, className, delay }) {
-  const words = text.split(" ");
-  let offset = 0;
-
-  return <span className={className}>
-    <span className="sr-only">{text}</span>
-    <span aria-hidden="true">
-      {words.map((word, wordIndex) => {
-        const start = offset;
-        offset += Array.from(word).length + 1;
-        return <Fragment key={wordIndex}>
-          <span className={styles.typingWord}>
-            {Array.from(word).map((letter, index) => <span className={styles.typingLetter} style={{ "--benefit-letter-delay": `${delay + (start + index) * 32}ms` }} key={index}>{letter}</span>)}
-          </span>
-          {wordIndex < words.length - 1 && " "}
-        </Fragment>;
-      })}
-    </span>
-  </span>;
-}
+import { DESKTOP_MOTION_QUERY } from "../home-hero/desktop-motion";
 
 export default function BenefitsStrip({ benefits }) {
   const sectionRef = useRef(null);
   const [animation, setAnimation] = useState("static");
 
   useEffect(() => {
-    const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (preference.matches || !window.IntersectionObserver) return;
-
-    setAnimation("waiting");
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setAnimation("playing");
-        observer.disconnect();
-      }
-    }, { threshold: 0.15 });
-    observer.observe(sectionRef.current);
-
-    const stopAnimation = (event) => {
-      if (event.matches) { observer.disconnect(); setAnimation("static"); }
+    const media = window.matchMedia(DESKTOP_MOTION_QUERY);
+    let observer;
+    const update = () => {
+      observer?.disconnect();
+      setAnimation("static");
+      if (!media.matches || !window.IntersectionObserver) return;
+      setAnimation("waiting");
+      observer = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) {
+          setAnimation("playing");
+          observer.disconnect();
+        }
+      }, { threshold: .55 });
+      observer.observe(sectionRef.current);
     };
-    preference.addEventListener("change", stopAnimation);
-    return () => { observer.disconnect(); preference.removeEventListener("change", stopAnimation); };
+    update();
+    media.addEventListener("change", update);
+    return () => { observer?.disconnect(); media.removeEventListener("change", update); };
   }, []);
 
   return <section ref={sectionRef} className={styles.benefitsSection} data-animation={animation} aria-label="Was Sie mit ServiceHub entdecken können">
     <dl className={styles.benefits}>
-      {benefits.map((benefit, index) => <div className={styles.benefit} key={benefit.title}>
+      {benefits.map((benefit, index) => <div className={styles.benefit} style={{ "--benefit-delay": `${index * 800}ms` }} key={benefit.title}>
         <dt>
-          <AnimatedTitle className={styles.benefitDesktop} text={benefit.title} delay={index * 180} />
-          <AnimatedTitle className={styles.benefitMobile} text={benefit.mobileTitle} delay={index * 180} />
+          <span className={styles.benefitDesktop}>{benefit.title}</span>
+          <span className={styles.benefitMobile}>{benefit.mobileTitle}</span>
         </dt>
         <dd><span className={styles.benefitDesktop}>{benefit.description}</span><span className={styles.benefitMobile}>{benefit.mobileDescription}</span></dd>
       </div>)}
