@@ -12,7 +12,7 @@ function Arrow() {
 }
 
 export default function ActionChoices() {
-  return <section className={styles.section} aria-labelledby="how-it-works-heading" data-scroll-blur="">
+  return <section className={styles.section} aria-labelledby="how-it-works-heading">
     <div className={styles.container}>
       <div className={styles.layout}>
         <header className={styles.intro}>

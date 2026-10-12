@@ -1,8 +1,0 @@
-.hero { position: relative; z-index: 0; }
-.nextSection { position: relative; z-index: 1; }
-.blur { display: none; position: fixed; bottom: 0; left: 0; right: 0; height: 300px; z-index: 10; pointer-events: none; }
-.blurLayer { position: absolute; inset: 0; backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur)); mask-image: linear-gradient(to bottom, transparent var(--start), #000 var(--middle), #000 var(--end), transparent calc(var(--end) + 12.5%)); }
-.blurLayer:nth-last-child(-n + 2) { mask-image: linear-gradient(to bottom, transparent var(--start), #000 var(--middle), #000 100%); }
-@media (max-width: 1199px), (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
-  .blur { display: none !important; }
-}

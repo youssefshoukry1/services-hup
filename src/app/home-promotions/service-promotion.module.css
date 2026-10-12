@@ -1,0 +1,40 @@
+.section { border-top: 1px solid #e5ebe7; background: #fff; color: #19312e; }
+.container { width: min(100% - 64px, 1120px); margin: 0 auto; padding: 3rem 0; }
+.container h2 { margin: 0; text-align: center; font-size: clamp(1.25rem, 2.5vw, 1.75rem); font-weight: 800; line-height: 1.25; letter-spacing: -.025em; }
+.grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; margin: 1.75rem 0 0; padding: 0; list-style: none; }
+.grid li { min-width: 0; }
+.card { display: flex; height: 100%; flex-direction: column; align-items: center; border: 1px solid #e2eae5; border-radius: .85rem; background: #fbfcfb; padding: 1.5rem 1.25rem; text-align: center; text-decoration: none; transition: border-color 180ms ease, background 180ms ease; }
+.icon { display: grid; width: 3.5rem; height: 3.5rem; flex: none; place-items: center; border-radius: 50%; background: #e3eee7; color: #008080; }
+.icon svg { width: 1.75rem; height: 1.75rem; }
+.copy { min-width: 0; margin-top: 1rem; }
+.copy h3 { font-size: 1rem; font-weight: 750; line-height: 1.4; letter-spacing: -.015em; }
+.copy p { margin-top: .35rem; color: #64746d; font-size: .8125rem; line-height: 1.6; }
+.action { display: inline-flex; min-height: 2.75rem; align-items: center; gap: .6rem; margin-top: .75rem; color: #007975; font-size: .8125rem; font-weight: 750; }
+.arrow { width: 1.15rem; height: 1.15rem; flex: none; transition: transform 180ms ease; }
+.card:hover .arrow { transform: translate(2px, -2px); }
+.card:hover { border-color: #a8cec2; background: #f1f7f3; }
+.card:focus-visible { outline: 2px solid #008080; outline-offset: 4px; }
+@media (max-width: 999px) {
+  .container { width: calc(100% - 48px); }
+  .grid { gap: 1rem; }
+}
+@media (max-width: 849px) {
+  .container h2 { font-size: 1.5rem; }
+}
+@media (max-width: 699px) {
+  .container { padding: 2rem 0; }
+  .grid { grid-template-columns: minmax(0, 1fr); gap: .75rem; margin-top: 1.25rem; }
+  .card { display: grid; grid-template-columns: 2.75rem minmax(0, 1fr); align-items: center; gap: 0 .85rem; padding: 1rem; text-align: left; }
+  .icon { width: 2.75rem; height: 2.75rem; }
+  .icon svg { width: 1.4rem; height: 1.4rem; }
+  .copy { margin-top: 0; }
+  .copy p { margin-top: .2rem; }
+  .action { grid-column: 2; justify-self: start; margin-top: .2rem; }
+}
+@media (max-width: 479px) {
+  .container { width: calc(100% - 28px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card, .arrow { transition: none; }
+  .card:hover .arrow { transform: none; }
+}

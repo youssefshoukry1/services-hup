@@ -70,8 +70,12 @@ export default function HomeHero() {
           <p className={styles.description}>Maler, Reinigung und Autoreparatur in Ihrer Nähe.</p>
           <HeroSearch />
           <div className={styles.actions}>
-            <Link className={styles.primary} href="/dienstleister">Dienstleister entdecken <span aria-hidden="true">↗</span></Link>
-            <Link className={styles.secondary} href="/add-company">Unternehmen eintragen <span aria-hidden="true">→</span></Link>
+            <Link className={styles.primary} href="/dienstleister">Dienstleister entdecken
+              <svg className={styles.arrow} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10" /></svg>
+            </Link>
+            <Link className={styles.secondary} href="/add-company">Unternehmen eintragen
+              <svg className={styles.arrow} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg>
+            </Link>
           </div>
         </div>
         <div className={styles.visual} ref={visualRef} role="img" aria-label="3D-Haus mit einem Maler an der Fassade und einem Mechaniker, der das Auto bei geöffneter Motorhaube repariert">

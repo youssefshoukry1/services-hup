@@ -39,10 +39,11 @@
 }
 .primary { border-radius: .55rem; background: #008080; padding: 0 1.15rem; color: white; box-shadow: 0 5px 15px #00808014; }
 .primary:hover { background: #006b69; transform: translateY(-2px); }
-.primary > span { font-size: 1.2rem; }
+.arrow { width: 1.15rem; height: 1.15rem; flex: none; transition: transform 180ms ease; }
+.primary:hover .arrow { transform: translate(2px, -2px); }
+.secondary:hover .arrow { transform: translateX(2px); }
 .secondary { color: #3c514a; }
 .secondary:hover { color: #008080; }
-.secondary > span[aria-hidden] { font-size: 1.05rem; }
 .visual {
   position: relative;
   min-width: 0;
@@ -52,6 +53,7 @@
 .scene { position: absolute; inset: 0; cursor: grab; opacity: 0; }
 .sceneReady { opacity: 1; }
 .scene:active { cursor: grabbing; }
+.scene canvas { touch-action: pan-y pinch-zoom !important; }
 .fallback { position: relative; width: 100%; height: 100%; }
 .poster { object-fit: contain; }
 .hero a:focus-visible { outline: 2px solid #008080; outline-offset: 4px; }
@@ -78,13 +80,15 @@
   .secondary { min-height: 2.75rem; gap: .65rem; font-size: .8rem; font-weight: 700; color: #006f6d; }
   .secondary { text-decoration: underline; text-underline-offset: .2rem; text-decoration-color: #b3ccc4; }
   .visual { width: 100%; height: clamp(14rem, 65vw, 23rem); }
-  /* Override OrbitControls' inline touch rule so phone users can scroll past the scene. */
-  .scene canvas { touch-action: pan-y pinch-zoom !important; }
+}
+@media (pointer: coarse) {
+  .scene, .scene:active { cursor: auto; pointer-events: none; }
 }
 @media (max-width: 479px) {
   .inner { padding-top: 1.25rem; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .primary, .secondary { transition: none; }
+  .primary, .secondary, .arrow { transition: none; }
+  .primary:hover .arrow, .secondary:hover .arrow { transform: none; }
   .primary:hover { transform: none; }
 }

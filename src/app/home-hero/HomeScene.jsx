@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Environment, Lightformer, OrbitControls } from "@react-three/drei";
-import { MOUSE, TOUCH } from "three";
+import { MOUSE } from "three";
 import HouseModel from "./HouseModel";
 
 const target = [0.2, 1.1, 0.35];
@@ -43,7 +43,7 @@ function ViewControls({ autoRotate, active, onInteract }) {
     autoRotate={autoRotate && active}
     autoRotateSpeed={0.45}
     mouseButtons={{ LEFT: MOUSE.ROTATE, MIDDLE: null, RIGHT: null }}
-    touches={{ ONE: TOUCH.ROTATE, TWO: TOUCH.ROTATE }}
+    touches={{ ONE: null, TWO: null }}
     onStart={onInteract}
   />;
 }
@@ -93,7 +93,6 @@ export default function HomeScene({ active, reducedMotion, fallback, rotating, o
         <Lightformer intensity={1.5} position={[0, 7, 0]} rotation={[Math.PI / 2, 0, 0]} scale={[8, 8, 1]} />
       </Environment>
       <HouseModel />
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.09, 0]} receiveShadow><planeGeometry args={[200, 200]} /><shadowMaterial transparent opacity={0.16} /></mesh>
       <ViewControls autoRotate={autoRotate} active={active} onInteract={onInteract} />
       <SceneReady onReady={onReady} />
     </Canvas>

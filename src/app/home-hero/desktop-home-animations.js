@@ -4,44 +4,22 @@ import { SplitText } from "gsap/SplitText";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
-export function mountHomeAnimations(root, { desktop }) {
-  const blur = root.querySelector("[data-desktop-blur]");
-  const activeTransitions = new Set();
+export function mountHomeAnimations(root) {
   const splits = [];
-  const updateBlur = (trigger) => {
-    if (trigger.isActive) activeTransitions.add(trigger);
-    else activeTransitions.delete(trigger);
-    blur.style.display = activeTransitions.size ? "block" : "none";
-  };
 
   const context = gsap.context(() => {
-    if (desktop) {
-      const hero = root.querySelector("[data-desktop-hero]");
-      const content = root.querySelector("[data-desktop-hero-content]");
-      gsap.to(content, {
-        autoAlpha: .3, y: "-40vh", scale: .94, ease: "none",
-        scrollTrigger: {
-          trigger: hero, pin: hero, start: "clamp(bottom bottom)", end: "+=100%",
-          scrub: true, pinSpacing: false, invalidateOnRefresh: true,
-          onToggle: updateBlur, onRefresh: updateBlur,
-        },
+    root.querySelectorAll("[data-promotion-heading]").forEach((heading) => {
+      const split = SplitText.create(heading, { type: "lines", mask: "lines", autoSplit: true,
+        onSplit: (instance) => gsap.fromTo(instance.lines, { opacity: 0, yPercent: 100, rotation: 1 }, {
+          opacity: 1, yPercent: 0, rotation: 0, duration: .5, stagger: .2, ease: "sine.out",
+          scrollTrigger: { trigger: heading, start: "top 90%", toggleActions: "play none none reset" },
+        }),
       });
-
-      root.querySelectorAll("[data-scroll-blur]").forEach((section) => {
-        ScrollTrigger.create({ trigger: section, start: "top bottom", end: "bottom bottom", onToggle: updateBlur, onRefresh: updateBlur });
-      });
-    }
-
-    const heading = root.querySelector("[data-promotion-heading]");
-    const split = SplitText.create(heading, { type: "lines", mask: "lines", autoSplit: true,
-      onSplit: (instance) => gsap.fromTo(instance.lines, { yPercent: 100, rotation: 1 }, {
-        yPercent: 0, rotation: 0, duration: .5, stagger: .2, ease: "sine.out",
-        scrollTrigger: { trigger: heading, start: "top 90%", toggleActions: "play none none reset" },
-      }),
+      splits.push(split);
     });
-    splits.push(split);
 
-    root.querySelectorAll("[data-promotion-item]").forEach((item, index) => {
+    root.querySelectorAll("[data-promotion-item]").forEach((item) => {
+      const index = Array.from(item.parentElement.children).indexOf(item);
       gsap.fromTo(item, { opacity: 0, y: 50 }, {
         opacity: 1, y: 0, duration: .5, delay: index * .15, ease: "sine.out", force3D: "auto",
         onStart: () => { item.style.willChange = "transform, opacity"; },
@@ -70,7 +48,5 @@ export function mountHomeAnimations(root, { desktop }) {
     splits.forEach((split) => split.revert());
     context.revert();
     root.querySelectorAll("[data-promotion-item]").forEach((item) => item.style.removeProperty("will-change"));
-    activeTransitions.clear();
-    blur.style.removeProperty("display");
   };
 }

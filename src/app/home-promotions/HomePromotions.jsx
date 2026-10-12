@@ -2,6 +2,7 @@ import BenefitsStrip from "./BenefitsStrip";
 import PromotionIcon from "./PromotionIcon";
 import styles from "./home-promotions.module.css";
 import ActionChoices from "./ActionChoices";
+import ServicePromotion from "./ServicePromotion";
 
 const benefits = [
   { title: "Für Ihr Zuhause", description: "Malerarbeiten & Reinigung", mobileTitle: "Zuhause", mobileDescription: "Malen & Reinigen" },
@@ -32,7 +33,7 @@ export default function HomePromotions() {
     <>
       <BenefitsStrip benefits={benefits} />
 
-      <section className={styles.promotionSection} aria-labelledby="promotion-heading" data-scroll-blur="">
+      <section className={styles.promotionSection} aria-labelledby="promotion-heading">
         <div className={`${styles.container} ${styles.promotionContainer}`}>
           <header className={styles.promotionHeading}>
             <h2 id="promotion-heading" data-promotion-heading="">ServiceHub verbindet.</h2>
@@ -52,6 +53,7 @@ export default function HomePromotions() {
       </section>
 
       <ActionChoices />
+      <ServicePromotion />
     </>
   );
 }
