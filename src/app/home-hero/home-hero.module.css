@@ -48,10 +48,12 @@
   min-width: 0;
   height: 30rem;
 }
-.scene { position: absolute; inset: 0; cursor: grab; }
+.preview { position: absolute; inset: 0; pointer-events: none; }
+.scene { position: absolute; inset: 0; cursor: grab; opacity: 0; }
+.sceneReady { opacity: 1; }
 .scene:active { cursor: grabbing; }
-.fallback { display: grid; width: 100%; height: 100%; place-items: center; }
-.fallback svg { width: 100%; height: 100%; max-height: 30rem; }
+.fallback { position: relative; width: 100%; height: 100%; }
+.poster { object-fit: contain; }
 .hero a:focus-visible { outline: 2px solid #008080; outline-offset: 4px; }
 @media (min-width: 1400px) {
   .inner { padding-top: 4rem; padding-bottom: 3.5rem; }

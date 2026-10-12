@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import { useEffect, useRef } from "react";
-import { Canvas, useThree } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Environment, Lightformer, OrbitControls } from "@react-three/drei";
 import { MOUSE, TOUCH } from "three";
 import HouseModel from "./HouseModel";
@@ -48,7 +48,26 @@ function ViewControls({ autoRotate, active, onInteract }) {
   />;
 }
 
-export default function HomeScene({ active, reducedMotion, fallback, rotating, onInteract }) {
+function SceneReady({ onReady }) {
+  const notified = useRef(false);
+  const frame = useRef(null);
+
+  useEffect(() => () => {
+    if (frame.current !== null) cancelAnimationFrame(frame.current);
+    notified.current = false;
+  }, []);
+
+  useFrame(() => {
+    if (notified.current) return;
+    notified.current = true;
+    // Wait until this frame has been drawn before replacing the HTML preview.
+    frame.current = requestAnimationFrame(onReady);
+  });
+
+  return null;
+}
+
+export default function HomeScene({ active, reducedMotion, fallback, rotating, onInteract, onReady }) {
   const autoRotate = rotating && !reducedMotion;
 
   return (
@@ -76,6 +95,7 @@ export default function HomeScene({ active, reducedMotion, fallback, rotating, o
       <HouseModel />
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.09, 0]} receiveShadow><planeGeometry args={[200, 200]} /><shadowMaterial transparent opacity={0.16} /></mesh>
       <ViewControls autoRotate={autoRotate} active={active} onInteract={onInteract} />
+      <SceneReady onReady={onReady} />
     </Canvas>
   );
 }

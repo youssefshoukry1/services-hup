@@ -10,4 +10,28 @@
 .bottom { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .8rem; border-top: 1px solid #dce7e7; padding: 1.1rem 0 1.5rem; color: #7a898f; font-size: .68rem; }.bottomLinks { display: flex; flex-wrap: wrap; gap: 1rem; }.bottomLinks a:hover, .bottomLinks button:hover { color: #008080; }.bottomLinks button { font-weight: 750; }
 @media (min-width: 560px) { .top { grid-template-columns: repeat(2, minmax(0,1fr)); }.brandColumn { grid-column: 1 / -1; } }
 @media (min-width: 900px) { .top { grid-template-columns: minmax(0,1.4fr) minmax(0,.7fr) minmax(0,.7fr) minmax(16rem,1fr); gap: 2.5rem; padding: 4rem 0 3.5rem; }.brandColumn { grid-column: auto; } }
+@media (max-width: 899px) {
+  .container { width: min(100% - 40px, 600px); }
+  .top { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem 1rem; padding: 2rem 0 1.5rem; }
+  .brandColumn { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; border-bottom: 1px solid #dce7e7; padding-bottom: 1.25rem; }
+  .logo { font-size: 1.5rem; }
+  .socials { gap: .5rem; margin-top: 0; }
+  .socials a { width: 2.75rem; height: 2.75rem; }
+  .linksColumn { min-width: 0; gap: 0; }
+  .linksColumn h2, .contactColumn h2 { margin-bottom: .5rem; font-size: .875rem; }
+  .linksColumn a { display: flex; min-height: 2.75rem; align-items: center; max-width: 100%; padding: .5rem 0; font-size: .8125rem; line-height: 1.5; overflow-wrap: anywhere; }
+  .contactColumn { grid-column: 1 / -1; min-width: 0; border: 1px solid #dce7e7; border-radius: 1rem; background: #fff; padding: 1.25rem; }
+  .form { gap: .75rem; margin-top: .75rem; }
+  .form input, .form textarea { background: #f8fbfa; padding: .8rem; }
+  .form input { min-height: 3rem; }
+  .form textarea { min-height: 6rem; }
+  .form button { min-height: 3rem; font-size: .875rem; }
+  .form small { font-size: .75rem; line-height: 1.5; }
+  .bottom { flex-direction: column; align-items: stretch; gap: 1rem; padding: 1.25rem 0 1.5rem; font-size: .75rem; line-height: 1.6; }
+  .bottom > span { order: 1; text-align: center; }
+  .bottomLinks { justify-content: center; align-items: center; gap: .5rem 1rem; }
+  .bottomLinks a { display: flex; min-height: 2.75rem; align-items: center; text-align: center; overflow-wrap: anywhere; }
+  .bottomLinks button { display: flex; min-height: 2.75rem; align-items: center; justify-content: center; border: 1px solid #dce7e7; border-radius: .7rem; background: #fff; padding: .6rem 1rem; color: #007975; }
+}
+.footer a:focus-visible, .footer button:focus-visible { outline: 2px solid #008080; outline-offset: 4px; }
 @media (prefers-reduced-motion: reduce) { .bottomLinks button { scroll-behavior: auto; } }
