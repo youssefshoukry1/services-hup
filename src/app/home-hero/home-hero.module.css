@@ -16,19 +16,8 @@
 .copy { display: flex; flex-direction: column; min-width: 0; padding-bottom: 1rem; }
 .desktopOnly { display: inline; }
 .mobileOnly { display: none; }
-.eyebrow {
-  display: flex;
-  align-items: center;
-  gap: .6rem;
-  color: #557169;
-  font-size: .65rem;
-  font-weight: 750;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-}
-.eyebrow > span { width: .4rem; height: .4rem; border-radius: 50%; background: #008080; }
 .copy h1 {
-  margin: 1.5rem 0 1.4rem;
+  margin: 0 0 1.4rem;
   font-size: clamp(2.9rem, 4.35vw, 4.2rem);
   font-weight: 800;
   line-height: 1.1;
@@ -63,9 +52,6 @@
 .scene:active { cursor: grabbing; }
 .fallback { display: grid; width: 100%; height: 100%; place-items: center; }
 .fallback svg { width: 100%; height: 100%; max-height: 30rem; }
-.benefits { display: flex; align-items: center; justify-content: space-between; gap: 1rem; width: min(100% - 64px, 1280px); margin: 0 auto; border-top: 1px solid #e5ebe5; padding: 1.35rem 0; }
-.benefits > span { display: flex; align-items: center; gap: .8rem; color: #68796e; font-size: .7rem; font-weight: 650; }
-.benefits b { color: #99a69a; font-size: .6rem; font-weight: 500; }
 .hero a:focus-visible { outline: 2px solid #008080; outline-offset: 4px; }
 @media (min-width: 1400px) {
   .inner { padding-top: 4rem; padding-bottom: 3.5rem; }
@@ -73,7 +59,6 @@
 }
 @media (max-width: 1099px) {
   .inner { width: calc(100% - 48px); gap: 1.5rem; }
-  .benefits { width: calc(100% - 48px); }
   .copy h1 { font-size: 3rem; }
   .visual { height: 28rem; }
   .description { font-size: .86rem; }
@@ -84,17 +69,15 @@
   .copy { display: flex; flex-direction: column; max-width: 40rem; padding-bottom: 0; }
   .desktopOnly { display: none; }
   .mobileOnly { display: inline; }
-  .eyebrow { display: none; }
-  .copy h1 { margin: 0 0 .85rem; font-size: clamp(2rem, 7.5vw, 2.65rem); line-height: 1.16; letter-spacing: -.045em; }
+  .copy h1 { margin: 0 0 .85rem; font-size: 1.5rem; line-height: 1.25; letter-spacing: -.025em; }
   .description { max-width: 33rem; font-size: .9rem; line-height: 1.65; color: #52665e; }
   .actions { order: 2; margin-top: .3rem; }
   .primary { display: none; }
   .secondary { min-height: 2.75rem; gap: .65rem; font-size: .8rem; font-weight: 700; color: #006f6d; }
-  .secondary > .mobileOnly { text-decoration: underline; text-underline-offset: .2rem; text-decoration-color: #b3ccc4; }
+  .secondary { text-decoration: underline; text-underline-offset: .2rem; text-decoration-color: #b3ccc4; }
   .visual { width: 100%; height: clamp(14rem, 65vw, 23rem); }
   /* Override OrbitControls' inline touch rule so phone users can scroll past the scene. */
   .scene canvas { touch-action: pan-y pinch-zoom !important; }
-  .benefits { display: none; }
 }
 @media (max-width: 479px) {
   .inner { padding-top: 1.25rem; }

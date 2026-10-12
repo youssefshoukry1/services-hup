@@ -77,9 +77,9 @@ export default function HeroSearch() {
             <span className={styles.text}><strong>{company.name}</strong><small>{company.address}</small></span>
             <span aria-hidden="true">↗</span>
           </Link>)}
-          {results.companies.length > 6 && <p className={styles.message}>6 von {results.companies.length} Unternehmen. Grenzen Sie Ihre Suche mit einem Ort oder Namen ein.</p>}
-          {failed && <p className={styles.message} role="status">Unternehmen konnten nicht geladen werden. Sie können weiterhin nach Dienstleistungen suchen.</p>}
-          {!loading && !failed && !count && <div className={styles.empty}><strong>Keine Treffer gefunden</strong><p>Versuchen Sie eine andere Dienstleistung, ein Unternehmen oder einen Ort.</p></div>}
+          {results.companies.length > 6 && <p className={styles.message}>6 von {results.companies.length} Unternehmen. Suche nach Ort oder Name verfeinern.</p>}
+          {failed && <p className={styles.message} role="status">Unternehmen nicht verfügbar. Dienstleistungssuche ist möglich.</p>}
+          {!loading && !failed && !count && <div className={styles.empty}><strong>Keine Treffer</strong><p>Anderen Suchbegriff versuchen.</p></div>}
         </div>
       )}
     </div>

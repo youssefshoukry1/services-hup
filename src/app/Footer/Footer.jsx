@@ -47,7 +47,6 @@ export default function Footer() {
             <Link href="/services/painters">Malerarbeiten</Link>
             <Link href="/services/cleaning">Reinigung</Link>
             <Link href="/services/auto_repair">Autoreparatur</Link>
-            <Link href="/services">Alle Dienstleistungen</Link>
           </nav>
 
           <nav className={styles.linksColumn} aria-label="Footernavigation">

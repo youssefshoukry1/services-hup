@@ -4,7 +4,6 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { Component, useCallback, useEffect, useRef, useState } from "react";
 import HeroSearch from "./HeroSearch";
-import ScrambleBenefit from "./ScrambleBenefit";
 import styles from "./home-hero.module.css";
 
 function SceneFallback() {
@@ -122,13 +121,12 @@ export default function HomeHero() {
     <section className={styles.hero} aria-labelledby="hero-heading">
       <div className={styles.inner}>
         <div className={styles.copy}>
-          <p className={styles.eyebrow}><span /> Profis für Zuhause & unterwegs</p>
           <h1 id="hero-heading"><span className={styles.desktopOnly}>Ihr Alltag.<br /><em>In guten Händen.</em></span><span className={styles.mobileOnly}>Dienstleister<br /><em>in Ihrer Nähe.</em></span></h1>
-          <p className={styles.description}><span className={styles.desktopOnly}>Ein frischer Anstrich, ein sauberes Zuhause oder ein Auto, das wieder läuft. Finden Sie die passenden Profis in Ihrer Nähe – mit ServiceHub.</span><span className={styles.mobileOnly}>Malerarbeiten, Reinigung oder Autoreparatur: Finden Sie passende Unternehmen und nehmen Sie direkt Kontakt auf.</span></p>
+          <p className={styles.description}>Maler, Reinigung und Autoreparatur in Ihrer Nähe.</p>
           <HeroSearch />
           <div className={styles.actions}>
             <Link className={styles.primary} href="/dienstleister">Dienstleister entdecken <span aria-hidden="true">↗</span></Link>
-            <Link className={styles.secondary} href="/add-company"><span className={styles.desktopOnly}>Unternehmen eintragen</span><span className={styles.mobileOnly}>Für Unternehmen: Eintrag erstellen</span><span aria-hidden="true">→</span></Link>
+            <Link className={styles.secondary} href="/add-company">Unternehmen eintragen <span aria-hidden="true">→</span></Link>
           </div>
         </div>
         <div className={styles.visual} ref={visualRef} role="img" aria-label="3D-Haus mit einem Maler an der Fassade und einem Mechaniker, der das Auto bei geöffneter Motorhaube repariert">
@@ -136,11 +134,6 @@ export default function HomeHero() {
             <SceneBoundary><HomeScene active={visible} reducedMotion={reducedMotion} fallback={<SceneFallback />} rotating={rotating} onInteract={handleInteract} /></SceneBoundary>
           </div>
         </div>
-      </div>
-      <div className={styles.benefits}>
-        <ScrambleBenefit number="01">Lokale Unternehmen entdecken</ScrambleBenefit>
-        <ScrambleBenefit number="02">Passende Dienstleistung finden</ScrambleBenefit>
-        <ScrambleBenefit number="03">Direkt ins Gespräch kommen</ScrambleBenefit>
       </div>
     </section>
   );

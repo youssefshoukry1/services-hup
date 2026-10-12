@@ -22,7 +22,7 @@ function ContactCard({ company, mobile = false }) {
   const headingId = mobile ? "mobile-contact-heading" : "contact-heading";
   return (
     <aside className={`${styles.contact} ${mobile ? styles.mobileContact : styles.desktopContact}`} aria-labelledby={headingId}>
-      <h2 id={headingId}>{company.name} kontaktieren</h2>
+      <h2 id={headingId}>Kontakt</h2>
       <a className={styles.primaryAction} href={`tel:${company.phone.replace(/\s/g, "")}`}>{company.phone} anrufen</a>
       <a className={styles.secondaryAction} href={`mailto:${company.email}`}>E-Mail senden</a>
       <dl className={styles.details}>
@@ -61,7 +61,6 @@ export default async function CompanyDetailPage({ params }) {
       <div className={styles.container}>
         <nav className={styles.breadcrumbs} aria-label="Brotkrumennavigation">
           <Link href="/">Startseite</Link><span aria-hidden="true">/</span>
-          <Link href="/services">Dienstleistungen</Link><span aria-hidden="true">/</span>
           <Link href={`/services/${category.id}`}>{category.title}</Link><span aria-hidden="true">/</span>
           <span aria-current="page">{company.name}</span>
         </nav>
@@ -84,7 +83,7 @@ export default async function CompanyDetailPage({ params }) {
 
             <section className={styles.section} aria-labelledby="services-heading">
               <div className={styles.sectionTitle}>
-                <h2 id="services-heading">Leistungen &amp; angegebene Preise</h2>
+                <h2 id="services-heading">Leistungen &amp; Preise</h2>
               </div>
               <ul className={styles.priceList}>
                 {company.prices.map((item) => (
@@ -94,7 +93,7 @@ export default async function CompanyDetailPage({ params }) {
                   </li>
                 ))}
               </ul>
-              <p className={styles.priceNote}>Die Preise stammen aus dem Eintrag. Klären Sie Leistungsumfang, Steuern, Material, Anfahrt und Endpreis vor der Beauftragung direkt mit dem Unternehmen.</p>
+              <p className={styles.priceNote}>Preise laut Unternehmen. Vor dem Auftrag Leistungen, Steuern, Material, Anfahrt und Gesamtpreis klären.</p>
               <ContactCard company={company} mobile />
             </section>
             {getGalleryImages(company.id).length > 0 && <ServiceGallery images={getGalleryImages(company.id)} />}
@@ -108,7 +107,7 @@ export default async function CompanyDetailPage({ params }) {
             <RelatedCompanies companies={relatedCompanies} categoryId={category.id} />
           </section>
         )}
-        <Link className={styles.backLink} href={`/services/${category.id}`}>← Weitere Unternehmen für {category.title.toLowerCase()} ansehen</Link>
+        <Link className={styles.backLink} href={`/services/${category.id}`}>← Mehr {category.title}</Link>
       </div>
     </main>
   );

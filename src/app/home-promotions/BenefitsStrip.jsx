@@ -2,14 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 import styles from "./home-promotions.module.css";
-import { DESKTOP_MOTION_QUERY } from "../home-hero/desktop-motion";
 
 export default function BenefitsStrip({ benefits }) {
   const sectionRef = useRef(null);
   const [animation, setAnimation] = useState("static");
 
   useEffect(() => {
-    const media = window.matchMedia(DESKTOP_MOTION_QUERY);
+    const media = window.matchMedia("(prefers-reduced-motion: no-preference)");
     let observer;
     const update = () => {
       observer?.disconnect();

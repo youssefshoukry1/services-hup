@@ -37,14 +37,18 @@
 @media (max-width: 699px) {
   .container { padding-block: 2.5rem 2rem; }
   .layout { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
-  .intro h2 { margin-top: .9rem; font-size: clamp(2rem, 7vw, 2.6rem); }
+  .intro h2 { margin-top: 0; }
   .description { max-width: 30rem; font-size: .875rem; }
   .primaryLink { margin-top: 1.25rem; }
   .stepContent { grid-template-columns: 2rem minmax(0, 1fr); gap: .8rem; padding: 1.25rem 0; }
-  .step h3 { font-size: 1.125rem; }
+  .step h3 { font-size: 1rem; }
   .step p { font-size: .8125rem; }
   .business { grid-template-columns: minmax(0, 1fr); gap: .65rem; margin-top: 2rem; padding-top: 1.5rem; }
   .businessLink { width: max-content; max-width: 100%; margin-top: .25rem; }
+}
+@media (max-width: 849px) {
+  .intro h2 { font-size: 1.5rem; line-height: 1.25; letter-spacing: -.025em; }
+  .step h3 { font-size: 1rem; }
 }
 @media (max-width: 479px) {
   .container { width: calc(100% - 28px); }
@@ -54,6 +58,6 @@
   .primaryLink, .arrow { transition: none; }
   .primaryLink:hover .arrow, .businessLink:hover .arrow { transform: none; }
 }
-@media (min-width: 1200px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+@media (prefers-reduced-motion: no-preference) {
   .step { overflow: hidden; }
 }

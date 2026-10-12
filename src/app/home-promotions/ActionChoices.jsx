@@ -2,9 +2,9 @@ import Link from "next/link";
 import styles from "./action-choices.module.css";
 
 const steps = [
-  { title: "Sagen Sie, was Sie brauchen.", description: "Wählen Sie eine Dienstleistung und Ihre Region. So finden Sie Unternehmen in Ihrer Nähe." },
-  { title: "Lernen Sie die Profis kennen.", description: "Sehen Sie sich Leistungen, Preise und Unternehmensprofile an und finden Sie das passende Angebot." },
-  { title: "Kommen Sie direkt ins Gespräch.", description: "Kontaktieren Sie das Unternehmen per Telefon oder E-Mail und besprechen Sie Ihr Anliegen." },
+  { title: "Suchen", description: "Dienstleistung und Ort wählen." },
+  { title: "Vergleichen", description: "Leistungen und Preise ansehen." },
+  { title: "Kontakt aufnehmen", description: "Direkt anrufen oder eine E-Mail senden." },
 ];
 
 function Arrow() {
@@ -16,9 +16,7 @@ export default function ActionChoices() {
     <div className={styles.container}>
       <div className={styles.layout}>
         <header className={styles.intro}>
-          <p className={styles.eyebrow}>So funktioniert ServiceHub</p>
-          <h2 id="how-it-works-heading">Passende Hilfe.<br /><em>Ganz in Ihrer Nähe.</em></h2>
-          <p className={styles.description}>Ob Zuhause oder Auto: Finden Sie lokale Unternehmen und nehmen Sie direkt Kontakt auf. In drei einfachen Schritten.</p>
+          <h2 id="how-it-works-heading">In drei Schritten<br /><em>zum passenden Profi.</em></h2>
           <Link className={styles.primaryLink} href="/dienstleister">Dienstleister entdecken <Arrow /></Link>
         </header>
         <ol className={styles.steps} aria-label="In drei Schritten zur passenden Hilfe">
@@ -33,7 +31,7 @@ export default function ActionChoices() {
       </div>
       <aside className={styles.business} aria-labelledby="business-invitation-heading">
         <span className={styles.businessLabel}>Für Unternehmen</span>
-        <div className={styles.businessCopy}><h3 id="business-invitation-heading">Sie bieten Dienstleistungen an?</h3><p>Stellen Sie Ihr Unternehmen mit Leistungen und Kontaktdaten vor.</p></div>
+        <div className={styles.businessCopy}><h3 id="business-invitation-heading">Neue Kunden erreichen</h3><p>Leistungen und Kontaktdaten präsentieren.</p></div>
         <Link className={styles.businessLink} href="/add-company">Unternehmen eintragen <Arrow /></Link>
       </aside>
     </div>

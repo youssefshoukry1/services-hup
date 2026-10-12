@@ -12,7 +12,7 @@
 .benefitMobile { display: none; }
 .benefit dt { color: #243932; font-size: clamp(1.35rem, 2.1vw, 1.9rem); font-weight: 800; line-height: 1.3; letter-spacing: -.035em; }
 .benefit dd { max-width: 17rem; margin-top: .55rem; color: #718077; font-size: .8rem; line-height: 1.65; }
-@media (min-width: 1200px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+@media (prefers-reduced-motion: no-preference) {
 .benefitsSection[data-animation="waiting"] .benefit::before { transform: scaleY(0); }
 .benefitsSection[data-animation="waiting"] .benefit dt,
 .benefitsSection[data-animation="waiting"] .benefit dd { opacity: 0; transform: translateY(8px); }
@@ -100,7 +100,6 @@
   .features { gap: .5rem; margin: .9rem 0 1.1rem; }
   .features li { font-size: .8125rem; }
   .promotionContainer { padding-block: 1.5rem; }
-  .promotionHeading h2 { font-size: 1.25rem; }
   .promotionGrid { grid-template-columns: minmax(0, 1fr); gap: 0; margin-top: 1.25rem; }
   .promotionItem { flex-direction: column; align-items: center; padding: .95rem 0; text-align: center; }
   .promotionItem + .promotionItem { border-top: 1px solid #edf1ed; }
@@ -110,6 +109,9 @@
   .promotionBody { max-width: 22rem; margin-top: .5rem; }
   .promotionBody h3 { font-size: .9375rem; }
   .promotionDescription { margin-top: .25rem; font-size: .8125rem; }
+}
+@media (max-width: 849px) {
+  .promotionHeading h2 { font-size: 1.5rem; line-height: 1.25; letter-spacing: -.025em; }
 }
 @media (max-width: 479px) {
   .benefits, .container { width: calc(100% - 28px); }

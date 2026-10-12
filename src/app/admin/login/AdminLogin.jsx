@@ -37,7 +37,7 @@ export default function AdminLogin() {
       <Link href="/" className={styles.brand}>Service<span>Hub</span></Link>
       <p className={styles.eyebrow}>Administration</p>
       <h1>Anmelden</h1>
-      <p>Prüfen Sie neue Unternehmenseinträge und entscheiden Sie über die Veröffentlichung.</p>
+      <p>Unternehmenseinträge prüfen und freigeben.</p>
       <form onSubmit={submit}>
         <label>E-Mail-Adresse<input type="email" autoComplete="username" required value={email} onChange={(event) => setEmail(event.target.value)} /></label>
         <label>Passwort<input type="password" autoComplete="current-password" required value={password} onChange={(event) => setPassword(event.target.value)} /></label>

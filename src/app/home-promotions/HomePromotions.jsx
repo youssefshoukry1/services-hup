@@ -5,8 +5,8 @@ import ActionChoices from "./ActionChoices";
 
 const benefits = [
   { title: "Für Ihr Zuhause", description: "Malerarbeiten & Reinigung", mobileTitle: "Zuhause", mobileDescription: "Malen & Reinigen" },
-  { title: "Für Ihr Auto", description: "Autoreparatur in Ihrer Region", mobileTitle: "Auto", mobileDescription: "Autoreparatur" },
-  { title: "Direkt erreichbar", description: "Unternehmen per Telefon & E-Mail kontaktieren", mobileTitle: "Kontakt", mobileDescription: "Telefon & E-Mail" },
+  { title: "Für Ihr Auto", description: "Autoreparatur", mobileTitle: "Auto", mobileDescription: "Autoreparatur" },
+  { title: "Direkter Kontakt", description: "Telefon & E-Mail", mobileTitle: "Kontakt", mobileDescription: "Telefon & E-Mail" },
 ];
 
 const promotionalMessages = [
@@ -22,7 +22,7 @@ const promotionalMessages = [
   },
   {
     illustration: "contact",
-    title: "Direkt Kontakt aufnehmen",
+    title: "Kontakt aufnehmen",
     description: "Einfach per Telefon oder E-Mail.",
   },
 ];

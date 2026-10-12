@@ -170,7 +170,7 @@ export default function CompanyDirectory({ companies }) {
     <section ref={directoryRef} id="companies" className={styles.directory} aria-labelledby="directory-heading">
       <header className={styles.directoryHeading}>
         <div>
-          <h2 id="directory-heading">Wählen Sie einen Fachbetrieb.</h2>
+          <h2 id="directory-heading">Fachbetrieb finden</h2>
         </div>
       </header>
 
@@ -306,7 +306,7 @@ export default function CompanyDirectory({ companies }) {
             </svg>
           </div>
           <h3>Keine Unternehmen gefunden</h3>
-          <p>Versuchen Sie einen anderen Firmennamen oder Ort.</p>
+          <p>Anderen Namen oder Ort versuchen.</p>
           <button type="button" onClick={() => setQuery("")}>Suche löschen</button>
         </div>
       )}

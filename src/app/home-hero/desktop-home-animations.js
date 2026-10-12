@@ -4,7 +4,7 @@ import { SplitText } from "gsap/SplitText";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
-export function mountDesktopAnimations(root) {
+export function mountHomeAnimations(root, { desktop }) {
   const blur = root.querySelector("[data-desktop-blur]");
   const activeTransitions = new Set();
   const splits = [];
@@ -15,20 +15,22 @@ export function mountDesktopAnimations(root) {
   };
 
   const context = gsap.context(() => {
-    const hero = root.querySelector("[data-desktop-hero]");
-    const content = root.querySelector("[data-desktop-hero-content]");
-    gsap.to(content, {
-      autoAlpha: .3, y: "-40vh", scale: .94, ease: "none",
-      scrollTrigger: {
-        trigger: hero, pin: hero, start: "clamp(bottom bottom)", end: "+=100%",
-        scrub: true, pinSpacing: false, invalidateOnRefresh: true,
-        onToggle: updateBlur, onRefresh: updateBlur,
-      },
-    });
+    if (desktop) {
+      const hero = root.querySelector("[data-desktop-hero]");
+      const content = root.querySelector("[data-desktop-hero-content]");
+      gsap.to(content, {
+        autoAlpha: .3, y: "-40vh", scale: .94, ease: "none",
+        scrollTrigger: {
+          trigger: hero, pin: hero, start: "clamp(bottom bottom)", end: "+=100%",
+          scrub: true, pinSpacing: false, invalidateOnRefresh: true,
+          onToggle: updateBlur, onRefresh: updateBlur,
+        },
+      });
 
-    root.querySelectorAll("[data-scroll-blur]").forEach((section) => {
-      ScrollTrigger.create({ trigger: section, start: "top bottom", end: "bottom bottom", onToggle: updateBlur, onRefresh: updateBlur });
-    });
+      root.querySelectorAll("[data-scroll-blur]").forEach((section) => {
+        ScrollTrigger.create({ trigger: section, start: "top bottom", end: "bottom bottom", onToggle: updateBlur, onRefresh: updateBlur });
+      });
+    }
 
     const heading = root.querySelector("[data-promotion-heading]");
     const split = SplitText.create(heading, { type: "lines", mask: "lines", autoSplit: true,

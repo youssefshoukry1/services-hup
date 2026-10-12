@@ -107,10 +107,10 @@ export default function HomeDirectory() {
         setRegionOpen(false);
         setLocationMessage(`${nearest.name} als nächste verfügbare Region ausgewählt.`);
       } else {
-        setLocationMessage("Kein gelisteter Standort in Ihrer Nähe. Wählen Sie eine Region manuell.");
+        setLocationMessage("Keine Region in Ihrer Nähe. Region manuell wählen.");
       }
       setDetecting(false);
-    }, () => { setDetecting(false); setLocationMessage("Standort nicht verfügbar. Wählen Sie eine Region manuell."); }, { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 });
+    }, () => { setDetecting(false); setLocationMessage("Standort nicht verfügbar. Region manuell wählen."); }, { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 });
   }
 
   return (
@@ -119,7 +119,7 @@ export default function HomeDirectory() {
         <header className={styles.directoryHeader}>
           <Link href="/" className={styles.backLink}>← Startseite</Link>
           <h1>Dienstleister entdecken</h1>
-          <p>Finden Sie passende Unternehmen und filtern Sie nach Dienstleistung und Region.</p>
+          <p>Nach Dienstleistung und Region filtern.</p>
         </header>
         <div className={styles.layout}>
           <aside className={styles.sidebar} aria-label="Dienstleistungsfilter">
@@ -166,7 +166,7 @@ export default function HomeDirectory() {
                   <span>{region || "Region wählen"}</span>
                 </button>
                 {regionOpen && <div id="home-region-options" className={styles.regionMenu}>
-                  <div className={styles.regionMenuHeading}><strong>Wählen Sie Ihre Region</strong><small>Nur Unternehmen aus dieser Region anzeigen.</small></div>
+                  <div className={styles.regionMenuHeading}><strong>Region wählen</strong></div>
                   <button type="button" className={styles.detectButton} onClick={detectLocation} disabled={detecting}>{detecting ? "Standort wird ermittelt…" : "Standort erkennen"}</button>
                   <label className={styles.areaSearch}><span className="sr-only">Region suchen</span><input type="search" value={areaQuery} onChange={(event) => setAreaQuery(event.target.value)} placeholder="Stadt suchen" autoFocus /></label>
                   <div className={styles.areaList}>{regions.filter((item) => normalize(item.name).includes(normalize(areaQuery))).map((item) => <button key={item.name} type="button" className={styles.regionOption} aria-pressed={region === item.name} onClick={() => { setRegion(item.name); setRegionOpen(false); setAreaQuery(""); setLocationMessage(""); }}>{item.name}{region === item.name && <span aria-hidden="true">✓</span>}</button>)}{!regions.some((item) => normalize(item.name).includes(normalize(areaQuery))) && <p className={styles.locationMessage}>Keine Regionen gefunden</p>}</div>

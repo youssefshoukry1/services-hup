@@ -70,7 +70,7 @@ export default function AdminSubmissions() {
   return <main className={styles.page}>
     <div className={styles.dashboard}>
       <header className={styles.header}>
-        <div><Link href="/" className={styles.brand}>Service<span>Hub</span></Link><p className={styles.eyebrow}>Administration</p><h1>Unternehmen prüfen</h1><p>Neue Einträge werden erst nach Ihrer Freigabe öffentlich angezeigt.</p></div>
+        <div><Link href="/" className={styles.brand}>Service<span>Hub</span></Link><p className={styles.eyebrow}>Administration</p><h1>Unternehmen prüfen</h1><p>Veröffentlichung erst nach Freigabe.</p></div>
         <div className={styles.account}><span>{adminEmail}</span><button type="button" onClick={logout}>Abmelden</button></div>
       </header>
       <nav className={styles.tabs} aria-label="Status filtern">

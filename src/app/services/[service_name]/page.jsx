@@ -84,10 +84,6 @@ export default async function ServicePage({ params }) {
           <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
             <path d="m8 5 5 5-5 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-          <Link href="/services">Dienstleistungen</Link>
-          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
-            <path d="m8 5 5 5-5 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
           <span aria-current="page">{service.category.title}</span>
         </nav>
 

@@ -9,24 +9,32 @@ export default function HomeScrollTransition({ hero, children }) {
 
   useEffect(() => {
     const media = window.matchMedia(DESKTOP_MOTION_QUERY);
+    const motion = window.matchMedia("(prefers-reduced-motion: no-preference)");
     let dispose;
     let revision = 0;
     const update = async () => {
       const current = ++revision;
       dispose?.();
       dispose = undefined;
-      if (!media.matches) return;
+      if (!motion.matches) return;
       try {
-        // Phones do not download or initialize the scroll-animation library.
-        const { mountDesktopAnimations } = await import("./desktop-home-animations");
-        if (current === revision && media.matches) dispose = mountDesktopAnimations(rootRef.current);
+        const { mountHomeAnimations } = await import("./desktop-home-animations");
+        if (current === revision && motion.matches) {
+          dispose = mountHomeAnimations(rootRef.current, { desktop: media.matches });
+        }
       } catch (error) {
-        console.error("Desktop homepage animations could not load.", error);
+        console.error("Homepage animations could not load.", error);
       }
     };
     update();
     media.addEventListener("change", update);
-    return () => { revision++; dispose?.(); media.removeEventListener("change", update); };
+    motion.addEventListener("change", update);
+    return () => {
+      revision++;
+      dispose?.();
+      media.removeEventListener("change", update);
+      motion.removeEventListener("change", update);
+    };
   }, []);
 
   return <div ref={rootRef}>

@@ -64,7 +64,6 @@ export default function CardsServicesSection() {
       <div className={styles.glow} aria-hidden="true" />
       <div className={styles.container}>
         <header className={styles.heading}>
-          <span className={styles.eyebrow}>Dienstleistungen, denen Sie vertrauen können</span>
           <h2 id="services-heading">Hilfe für den Alltag.</h2>
         </header>
 
