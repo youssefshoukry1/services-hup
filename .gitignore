@@ -17,6 +17,8 @@
 
 # next.js
 /.next/
+# Isolated production-build checks are generated locally, not source files.
+/.next-*/
 /out/
 
 # production
