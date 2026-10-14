@@ -1,14 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import { mountTireReveal } from "./tire-reveal";
 import styles from "./service-promotion.module.css";
 
 export default function TireHeadline() {
   const headlineRef = useRef(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const headline = headlineRef.current;
     const section = headline?.closest("[data-service-promotion]");
     if (section) return mountTireReveal(section, headline);
@@ -20,6 +20,7 @@ export default function TireHeadline() {
       <span className={styles.tireTrack} aria-hidden="true" data-tire-track="">
         <span className={styles.tire} data-tire="">
           <Image src="/images/home/tire.webp" alt="" width={480} height={480}
+            loading="eager"
             sizes="(max-width: 575px) 80px, (max-width: 1024px) 104px, 128px" />
         </span>
       </span>
