@@ -1,7 +1,7 @@
 .section { border-top: 1px solid #e5ebe7; background: #fff; color: #19312e; }
 .container { width: min(100% - 64px, 1120px); margin: 0 auto; padding: 3rem 0; }
 .headline {
-  --tire-t: 1; --tire-rotation: 0;
+  --tire-t: 1; --tire-rotation: 0; --tire-offset: 0;
   --tire-size: clamp(60px, 18vw, 80px);
   --tire-gap: 12px; --tire-fade: 42px;
   --tire-edge: calc(var(--tire-t) * (100% - var(--tire-size)));
@@ -19,11 +19,14 @@
   mask-image: linear-gradient(to right, #000 0, #000 var(--tire-edge), #0008 calc(var(--tire-edge) + var(--tire-fade) * .35), transparent calc(var(--tire-edge) + var(--tire-fade)));
 }
 .tireTrack {
-  position: absolute; left: 0; right: var(--tire-size); bottom: 0; height: var(--tire-size);
-  transform: translate3d(calc(var(--tire-t) * 100%), 0, 0);
+  position: absolute; left: 0; right: 0; bottom: 0; height: var(--tire-size);
   pointer-events: none; user-select: none;
 }
-.tire { position: relative; display: block; width: var(--tire-size); height: var(--tire-size); }
+.tire {
+  position: absolute; right: 0; display: block; width: var(--tire-size); height: var(--tire-size);
+  overflow: clip;
+  transform: translate3d(calc(var(--tire-offset) * 1px), 0, 0);
+}
 .tire::after {
   content: ""; position: absolute; left: 12%; right: 12%; bottom: 0; height: 7px;
   border-radius: 50%; background: radial-gradient(closest-side, #10101040, transparent);
@@ -33,7 +36,7 @@
   transform: rotate(calc(var(--tire-rotation) * 1deg));
   transform-origin: 50% 50%;
 }
-.headline[data-tire-active="true"] .tireTrack,
+.headline[data-tire-active="true"] .tire,
 .headline[data-tire-active="true"] .tire img { will-change: transform; }
 @media (min-width: 576px) {
   .headline { --tire-size: clamp(80px, 12vw, 104px); --tire-gap: 18px; --tire-fade: 58px; }
@@ -76,7 +79,7 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .headline h2 { -webkit-mask-image: none; mask-image: none; }
-  .tireTrack { transform: translate3d(100%, 0, 0); }
+  .tire { transform: none; }
   .tire img { transform: none; }
   .card, .arrow { transition: none; }
   .card:hover .arrow { transform: none; }

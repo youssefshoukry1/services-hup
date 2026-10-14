@@ -4,7 +4,7 @@ import { mountTireReveal, tireFrame } from "../src/app/home-promotions/tire-reve
 
 function setup({ reduced = false } = {}) {
   let top = 780, nextFrame = 0, time = 0, reads = 0, geometryReads = 0, observerCallback, observations = 0;
-  let trackWidth = 576, tireWidth = 128;
+  let trackWidth = 704, tireWidth = 128;
   const frames = new Map(), listeners = new Map(), properties = new Map(), attributes = new Map();
   const preference = {
     matches: reduced,
@@ -59,10 +59,10 @@ function setup({ reduced = false } = {}) {
 
 test("the tire makes one revolution per circumference traveled", () => {
   const circumference = Math.PI * 100;
-  assert.deepEqual(tireFrame(0, circumference, 100), { t: 0, rotation: 0 });
-  assert.deepEqual(tireFrame(.5, circumference, 100), { t: .5, rotation: 180 });
-  assert.deepEqual(tireFrame(1, circumference, 100), { t: 1, rotation: 360 });
-  assert.deepEqual(tireFrame(1, 2 * circumference, 100), { t: 1, rotation: 720 });
+  assert.deepEqual(tireFrame(0, circumference, 100), { t: 0, rotation: 0, offset: -circumference });
+  assert.deepEqual(tireFrame(.5, circumference, 100), { t: .5, rotation: 180, offset: -circumference / 2 });
+  assert.deepEqual(tireFrame(1, circumference, 100), { t: 1, rotation: 360, offset: 0 });
+  assert.deepEqual(tireFrame(1, 2 * circumference, 100), { t: 1, rotation: 720, offset: 0 });
 });
 
 test("the scroll window reveals and reverses without measuring on every smoothing frame", () => {
@@ -139,13 +139,31 @@ test("responsive resizing recalculates rotation while keeping the same scroll pr
   effect.scrollTo(470);
   effect.flush();
   const rotation = effect.value("rotation");
-  effect.resize(288, 128);
+  effect.resize(416, 128);
   effect.flush();
   assert.equal(effect.value("t"), .5);
   assert.ok(Math.abs(effect.value("rotation") - rotation / 2) < .0001);
-  effect.resize(288, 64);
+  effect.resize(352, 64);
   effect.flush();
   assert.ok(Math.abs(effect.value("rotation") - rotation) < .0001);
   assert.equal(effect.geometryReads, 6);
   effect.dispose();
+});
+
+test("the tire remains inside the heading at phone widths throughout the reveal", () => {
+  for (const viewport of [320, 375, 425, 480]) {
+    const headingWidth = viewport - (viewport < 480 ? 28 : 48);
+    const tireWidth = Math.min(80, Math.max(60, viewport * .18));
+    const effect = setup();
+    effect.intersect(true);
+    effect.resize(headingWidth, tireWidth);
+    for (const top of [780, 625, 470, 315, 160, 470, 780]) {
+      effect.scrollTo(top);
+      effect.flush();
+      const left = headingWidth - tireWidth + effect.value("offset");
+      assert.ok(left >= -.001, `Tire escaped the left edge at ${viewport}px`);
+      assert.ok(left + tireWidth <= headingWidth + .001, `Tire escaped the right edge at ${viewport}px`);
+    }
+    effect.dispose();
+  }
 });

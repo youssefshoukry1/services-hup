@@ -10,6 +10,7 @@ export function tireFrame(progress, travel = 0, diameter = 1) {
   return {
     t,
     rotation: Math.max(0, travel) * t / (Math.PI * Math.max(1, diameter)) * 360,
+    offset: Math.max(0, travel) * (t - 1),
   };
 }
 
@@ -41,9 +42,10 @@ export function mountTireReveal(section, headline, win = window) {
     // Read layout once per scroll/resize, not on every smoothing frame.
     if (measurePending) {
       if (geometryPending) {
-        travel = headline.querySelector("[data-tire-track]").offsetWidth;
+        const tireWidth = headline.querySelector("[data-tire]").offsetWidth;
+        travel = Math.max(0, headline.querySelector("[data-tire-track]").offsetWidth - tireWidth);
         // The cutout has a small transparent margin around its circular tread.
-        diameter = headline.querySelector("[data-tire]").offsetWidth * .96;
+        diameter = tireWidth * .96;
         geometryPending = false;
       }
       const vh = win.innerHeight || 1;
@@ -116,6 +118,6 @@ export function mountTireReveal(section, headline, win = window) {
     observer.disconnect();
     reducedMotion.removeEventListener("change", sync);
     stop();
-    ["t", "rotation"].forEach((name) => headline.style.removeProperty(`--tire-${name}`));
+    ["t", "rotation", "offset"].forEach((name) => headline.style.removeProperty(`--tire-${name}`));
   };
 }
