@@ -34,21 +34,18 @@ test("mobile takes the static path before loading scroll-animation code", () => 
   assert.doesNotMatch(source("../src/app/home-promotions/PromotionIcon.jsx"), /IntersectionObserver|useEffect|data-animation/);
 });
 
-test("desktop effects are scoped, avoid footer pinning, and restore static state", () => {
+test("desktop effects are scoped and restore static state", () => {
   const calls = [];
-  const triggers = [];
   const events = [];
-  const blur = { style: { removeProperty(name) { delete this[name]; } } };
   const item = () => ({ style: { removeProperty(name) { delete this[name.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase())]; } } });
-  const hero = {}, content = {}, heading = {};
+  const heading = {};
   const promotions = [item(), item(), item()];
+  promotions.forEach((promotion) => { promotion.parentElement = { children: promotions }; });
   const stepContents = [{}, {}, {}];
   const stepDividers = [{}, {}, {}];
   const steps = stepContents.map((content, index) => ({ querySelector: (selector) => ({ "[data-step-content]": content, "[data-step-divider]": stepDividers[index] })[selector] }));
-  const sections = [{}, {}];
   const root = {
-    querySelector: (selector) => ({ "[data-desktop-blur]": blur, "[data-desktop-hero]": hero, "[data-desktop-hero-content]": content, "[data-promotion-heading]": heading })[selector],
-    querySelectorAll: (selector) => ({ "[data-scroll-blur]": sections, "[data-promotion-item]": promotions, "[data-action-step]": steps })[selector],
+    querySelectorAll: (selector) => ({ "[data-promotion-heading]": [heading], "[data-promotion-item]": promotions, "[data-action-step]": steps })[selector],
   };
   const sandbox = {
     gsap: {
@@ -57,18 +54,13 @@ test("desktop effects are scoped, avoid footer pinning, and restore static state
       to(target, options) { calls.push({ target, options }); return {}; },
       fromTo(target, from, options) { calls.push({ target, from, options }); return {}; },
     },
-    ScrollTrigger: { create: (options) => triggers.push(options), refresh: () => events.push("refreshed") },
+    ScrollTrigger: { refresh: () => events.push("refreshed") },
     SplitText: { create(target, options) { assert.equal(target, heading); options.onSplit({ lines: [{}] }); return { revert: () => events.push("split reverted") }; } },
   };
   const animationCode = source("../src/app/home-hero/desktop-home-animations.js").replace(/^import .*;\r?\n/gm, "").replace("export function", "function");
   vm.runInNewContext(animationCode, sandbox);
-  const dispose = sandbox.mountDesktopAnimations(root);
-  const pinned = calls.filter(({ options }) => options.scrollTrigger?.pin);
-  assert.equal(pinned.length, 1);
-  assert.equal(pinned[0].options.scrollTrigger.pin, hero);
-  assert.equal(pinned[0].options.scrollTrigger.start, "clamp(bottom bottom)");
-  assert.equal(pinned[0].options.scrollTrigger.pinSpacing, false);
-  assert.equal(triggers.length, sections.length);
+  const dispose = sandbox.mountHomeAnimations(root);
+  assert.ok(calls.every(({ options }) => !options.scrollTrigger?.pin));
   const stepReveals = calls.filter(({ target }) => stepContents.includes(target));
   assert.equal(stepReveals.length, 3);
   stepReveals.forEach(({ from, options }, index) => {
@@ -89,17 +81,86 @@ test("desktop effects are scoped, avoid footer pinning, and restore static state
     options.onComplete();
     assert.equal(target.style.willChange, undefined);
   });
-  // Overlapping incoming sections must not turn each other's blur off.
-  const first = { isActive: true }, second = { isActive: true };
-  triggers[0].onToggle(first);
-  triggers[1].onToggle(second);
-  first.isActive = false;
-  triggers[0].onToggle(first);
-  assert.equal(blur.style.display, "block");
-  second.isActive = false;
-  triggers[1].onToggle(second);
-  assert.equal(blur.style.display, "none");
+  reveals[0].options.onStart();
   dispose();
-  assert.equal(blur.style.display, undefined);
+  assert.equal(promotions[0].style.willChange, undefined);
   assert.deepEqual(events, ["refreshed", "split reverted", "context reverted"]);
+});
+
+function mountMotionEffect(matches, loadAnimations) {
+  let effect;
+  const listeners = new Set();
+  const media = {
+    matches,
+    addEventListener(type, callback) { assert.equal(type, "change"); listeners.add(callback); },
+    removeEventListener(type, callback) { assert.equal(type, "change"); listeners.delete(callback); },
+  };
+  const root = {};
+  const sandbox = {
+    DESKTOP_MOTION_QUERY, loadAnimations, console,
+    window: { matchMedia(query) { assert.equal(query, DESKTOP_MOTION_QUERY); return media; } },
+    useRef: () => ({ current: root }),
+    useEffect: (callback) => { effect = callback; },
+  };
+  const component = source("../src/app/home-hero/HomeScrollTransition.jsx");
+  const code = component.slice(0, component.indexOf("  return <div"))
+    .replace(/^import .*;\r?\n/gm, "")
+    .replace("export default function", "function")
+    .replace('import("./desktop-home-animations")', "loadAnimations()") + "}";
+  vm.runInNewContext(code, sandbox);
+  sandbox.HomeScrollTransition({});
+  const dispose = effect();
+  return {
+    root, listeners, dispose,
+    change(matches) { media.matches = matches; listeners.forEach((callback) => callback()); },
+  };
+}
+
+const settle = () => new Promise((resolve) => setImmediate(resolve));
+
+test("phones do not download or mount scroll animations", async () => {
+  let loads = 0;
+  const effect = mountMotionEffect(false, () => { loads++; throw new Error("Mobile loaded animations"); });
+  await settle();
+  effect.change(false);
+  await settle();
+  assert.equal(loads, 0);
+  effect.dispose();
+  assert.equal(effect.listeners.size, 0);
+});
+
+test("changing from desktop to phone restores static content", async () => {
+  let mounts = 0, disposals = 0;
+  const effect = mountMotionEffect(true, async () => ({
+    mountHomeAnimations(root) {
+      assert.equal(root, effect.root);
+      mounts++;
+      return () => { disposals++; };
+    },
+  }));
+  await settle();
+  assert.equal(mounts, 1);
+  effect.change(false);
+  assert.equal(disposals, 1);
+  effect.change(true);
+  await settle();
+  assert.equal(mounts, 2);
+  effect.dispose();
+  assert.equal(disposals, 2);
+  assert.equal(effect.listeners.size, 0);
+});
+
+test("a pending animation import cannot mount after switching to phone or unmounting", async () => {
+  let resolveLoad, mounts = 0;
+  const effect = mountMotionEffect(true, () => new Promise((resolve) => { resolveLoad = resolve; }));
+  const animations = { mountHomeAnimations() { mounts++; return () => {}; } };
+  effect.change(false);
+  resolveLoad(animations);
+  await settle();
+  assert.equal(mounts, 0);
+  effect.change(true);
+  effect.dispose();
+  resolveLoad(animations);
+  await settle();
+  assert.equal(mounts, 0);
 });

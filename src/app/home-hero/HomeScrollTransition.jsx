@@ -1,22 +1,23 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { DESKTOP_MOTION_QUERY } from "./desktop-motion";
 
 export default function HomeScrollTransition({ hero, children }) {
   const rootRef = useRef(null);
 
   useEffect(() => {
-    const motion = window.matchMedia("(prefers-reduced-motion: no-preference)");
+    const media = window.matchMedia(DESKTOP_MOTION_QUERY);
     let dispose;
     let revision = 0;
     const update = async () => {
       const current = ++revision;
       dispose?.();
       dispose = undefined;
-      if (!motion.matches) return;
+      if (!media.matches) return;
       try {
         const { mountHomeAnimations } = await import("./desktop-home-animations");
-        if (current === revision && motion.matches) {
+        if (current === revision && media.matches) {
           dispose = mountHomeAnimations(rootRef.current);
         }
       } catch (error) {
@@ -24,11 +25,11 @@ export default function HomeScrollTransition({ hero, children }) {
       }
     };
     update();
-    motion.addEventListener("change", update);
+    media.addEventListener("change", update);
     return () => {
       revision++;
       dispose?.();
-      motion.removeEventListener("change", update);
+      media.removeEventListener("change", update);
     };
   }, []);
 

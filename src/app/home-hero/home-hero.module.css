@@ -82,7 +82,7 @@
   .visual { width: 100%; height: clamp(14rem, 65vw, 23rem); }
 }
 @media (pointer: coarse) {
-  .scene, .scene:active { cursor: auto; pointer-events: none; }
+  .scene, .scene:active { cursor: auto; }
 }
 @media (max-width: 479px) {
   .inner { padding-top: 1.25rem; }

@@ -1,6 +1,46 @@
 .section { border-top: 1px solid #e5ebe7; background: #fff; color: #19312e; }
 .container { width: min(100% - 64px, 1120px); margin: 0 auto; padding: 3rem 0; }
-.container h2 { margin: 0; text-align: center; font-size: clamp(1.25rem, 2.5vw, 1.75rem); font-weight: 800; line-height: 1.25; letter-spacing: -.025em; }
+.headline {
+  --tire-t: 1; --tire-rotation: 0;
+  --tire-size: clamp(60px, 18vw, 80px);
+  --tire-gap: 12px; --tire-fade: 42px;
+  --tire-edge: calc(var(--tire-t) * (100% - var(--tire-size)));
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: min(100%, 44rem);
+  min-height: var(--tire-size);
+  margin: 0 auto;
+}
+.headline h2 {
+  width: 100%; margin: 0; padding-right: calc(var(--tire-size) + var(--tire-gap));
+  text-align: left; font-size: clamp(1.5rem, 3vw, 2.25rem); font-weight: 800; line-height: 1.25; letter-spacing: -.025em;
+  -webkit-mask-image: linear-gradient(to right, #000 0, #000 var(--tire-edge), #0008 calc(var(--tire-edge) + var(--tire-fade) * .35), transparent calc(var(--tire-edge) + var(--tire-fade)));
+  mask-image: linear-gradient(to right, #000 0, #000 var(--tire-edge), #0008 calc(var(--tire-edge) + var(--tire-fade) * .35), transparent calc(var(--tire-edge) + var(--tire-fade)));
+}
+.tireTrack {
+  position: absolute; left: 0; right: var(--tire-size); bottom: 0; height: var(--tire-size);
+  transform: translate3d(calc(var(--tire-t) * 100%), 0, 0);
+  pointer-events: none; user-select: none;
+}
+.tire { position: relative; display: block; width: var(--tire-size); height: var(--tire-size); }
+.tire::after {
+  content: ""; position: absolute; left: 12%; right: 12%; bottom: 0; height: 7px;
+  border-radius: 50%; background: radial-gradient(closest-side, #10101040, transparent);
+}
+.tire img {
+  position: relative; z-index: 1; display: block; width: 100%; height: auto;
+  transform: rotate(calc(var(--tire-rotation) * 1deg));
+  transform-origin: 50% 50%;
+}
+.headline[data-tire-active="true"] .tireTrack,
+.headline[data-tire-active="true"] .tire img { will-change: transform; }
+@media (min-width: 576px) {
+  .headline { --tire-size: clamp(80px, 12vw, 104px); --tire-gap: 18px; --tire-fade: 58px; }
+}
+@media (min-width: 1025px) {
+  .headline { --tire-size: clamp(104px, 9vw, 128px); --tire-gap: 24px; --tire-fade: 74px; }
+}
 .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; margin: 1.75rem 0 0; padding: 0; list-style: none; }
 .grid li { min-width: 0; }
 .card { display: flex; height: 100%; flex-direction: column; align-items: center; border: 1px solid #e2eae5; border-radius: .85rem; background: #fbfcfb; padding: 1.5rem 1.25rem; text-align: center; text-decoration: none; transition: border-color 180ms ease, background 180ms ease; }
@@ -19,7 +59,7 @@
   .grid { gap: 1rem; }
 }
 @media (max-width: 849px) {
-  .container h2 { font-size: 1.5rem; }
+  .headline h2 { font-size: 1.5rem; }
 }
 @media (max-width: 699px) {
   .container { padding: 2rem 0; }
@@ -35,6 +75,9 @@
   .container { width: calc(100% - 28px); }
 }
 @media (prefers-reduced-motion: reduce) {
+  .headline h2 { -webkit-mask-image: none; mask-image: none; }
+  .tireTrack { transform: translate3d(100%, 0, 0); }
+  .tire img { transform: none; }
   .card, .arrow { transition: none; }
   .card:hover .arrow { transform: none; }
 }

@@ -3,14 +3,17 @@
 import { useEffect, useRef } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Environment, Lightformer, OrbitControls } from "@react-three/drei";
-import { MOUSE } from "three";
+import { MOUSE, TOUCH } from "three";
 import HouseModel from "./HouseModel";
+import { installModelPointerGate } from "./model-pointer-gate";
 
 const target = [0.2, 1.1, 0.35];
 
-function ViewControls({ autoRotate, active, onInteract }) {
+function ViewControls({ autoRotate, active, onInteract, modelRef }) {
   const controls = useRef(null);
-  const { camera, size, invalidate } = useThree();
+  const { camera, size, invalidate, gl } = useThree();
+
+  useEffect(() => installModelPointerGate(gl.domElement, camera, () => modelRef.current), [camera, gl, modelRef]);
 
   useEffect(() => {
     // Keep the whole property in frame even when rotated diagonally on a phone.
@@ -30,6 +33,7 @@ function ViewControls({ autoRotate, active, onInteract }) {
 
   return <OrbitControls
     ref={controls}
+    domElement={gl.domElement}
     makeDefault
     target={target}
     enabled={active}
@@ -43,7 +47,7 @@ function ViewControls({ autoRotate, active, onInteract }) {
     autoRotate={autoRotate && active}
     autoRotateSpeed={0.45}
     mouseButtons={{ LEFT: MOUSE.ROTATE, MIDDLE: null, RIGHT: null }}
-    touches={{ ONE: null, TWO: null }}
+    touches={{ ONE: TOUCH.ROTATE, TWO: null }}
     onStart={onInteract}
   />;
 }
@@ -68,6 +72,7 @@ function SceneReady({ onReady }) {
 }
 
 export default function HomeScene({ active, reducedMotion, fallback, rotating, onInteract, onReady }) {
+  const modelRef = useRef(null);
   const autoRotate = rotating && !reducedMotion;
 
   return (
@@ -92,8 +97,8 @@ export default function HomeScene({ active, reducedMotion, fallback, rotating, o
         <Lightformer intensity={1.8} position={[4, 4, -3]} rotation={[0, -Math.PI / 2, 0]} scale={[5, 5, 1]} />
         <Lightformer intensity={1.5} position={[0, 7, 0]} rotation={[Math.PI / 2, 0, 0]} scale={[8, 8, 1]} />
       </Environment>
-      <HouseModel />
-      <ViewControls autoRotate={autoRotate} active={active} onInteract={onInteract} />
+      <group ref={modelRef}><HouseModel /></group>
+      <ViewControls autoRotate={autoRotate} active={active} onInteract={onInteract} modelRef={modelRef} />
       <SceneReady onReady={onReady} />
     </Canvas>
   );

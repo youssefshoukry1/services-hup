@@ -42,11 +42,20 @@ export default function HomePromotions() {
             </h2>
             <Image
               className={`${styles.headingWorker} ${styles.painter}`}
-              src="/images/home/workers/painter-teal.png"
+              src="/images/home/workers/painter-teal.webp"
               alt=""
               aria-hidden="true"
               width={1024}
               height={1536}
+              sizes="(max-width: 699px) 100px, 120px"
+            />
+            <Image
+              className={`${styles.headingWorker} ${styles.cleaner}`}
+              src="/images/home/workers/cleaner-spray.webp"
+              alt=""
+              aria-hidden="true"
+              width={480}
+              height={720}
               sizes="(max-width: 699px) 100px, 120px"
             />
           </header>
