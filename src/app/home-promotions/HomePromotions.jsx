@@ -1,3 +1,4 @@
+import Image from "next/image";
 import BenefitsStrip from "./BenefitsStrip";
 import PromotionIcon from "./PromotionIcon";
 import styles from "./home-promotions.module.css";
@@ -36,7 +37,18 @@ export default function HomePromotions() {
       <section className={styles.promotionSection} aria-labelledby="promotion-heading">
         <div className={`${styles.container} ${styles.promotionContainer}`}>
           <header className={styles.promotionHeading}>
-            <h2 id="promotion-heading" data-promotion-heading="">ServiceHub verbindet.</h2>
+            <h2 id="promotion-heading">
+              <span className={styles.promotionTitle} data-promotion-heading="">Se<span className={styles.paintedLetter}>r</span>viceHub verbindet.</span>
+            </h2>
+            <Image
+              className={`${styles.headingWorker} ${styles.painter}`}
+              src="/images/home/workers/painter-teal.png"
+              alt=""
+              aria-hidden="true"
+              width={1024}
+              height={1536}
+              sizes="(max-width: 699px) 100px, 120px"
+            />
           </header>
           <ul className={styles.promotionGrid}>
             {promotionalMessages.map((message) => (

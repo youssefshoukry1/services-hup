@@ -43,9 +43,21 @@
 .introduction { max-width: 38rem; margin-top: .8rem; color: #52665e; font-size: .95rem; line-height: 1.65; }
 .promotionSection { border-top: 1px solid #edf1ed; background: #fff; }
 .promotionContainer { padding-block: 2.5rem; }
-.promotionHeading { max-width: 46rem; margin: 0 auto; text-align: center; }
-.promotionHeading h2 { color: #243932; font-size: clamp(1.25rem, 2.5vw, 1.75rem); font-weight: 800; line-height: 1.25; letter-spacing: -.025em; }
-.promotionGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem; margin-top: 1.5rem; padding: 0; list-style: none; }
+.promotionHeading { --worker-height: 180px; position: relative; width: fit-content; margin: 0 auto; font-size: clamp(1.75rem, 3vw, 2.5rem); text-align: center; }
+.promotionHeading h2 { position: relative; z-index: 2; color: #243932; font-size: inherit; font-weight: 800; line-height: 1.25; letter-spacing: -.025em; }
+.promotionTitle { display: block; white-space: nowrap; }
+.paintedLetter {
+  background-color: #008080;
+  background-image: linear-gradient(to bottom, #243932 57%, #24393200 65%), url("/images/home/workers/wet-paint-teal.webp");
+  background-size: 100% 100%, 1em 1em;
+  background-position: center;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+.headingWorker { position: absolute; z-index: 1; top: -.2em; width: auto; height: var(--worker-height); pointer-events: none; user-select: none; }
+.painter { top: calc(1em - var(--worker-height) * .06); left: calc(1.25em - var(--worker-height) * .6); }
+.promotionGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem; margin-top: 1.25rem; padding: 0; list-style: none; }
 .promotionItem { display: flex; min-width: 0; flex-direction: column; align-items: center; text-align: center; }
 .promotionIcon { display: block; width: clamp(3rem, 4vw, 3.5rem); height: auto; aspect-ratio: 1; flex: none; }
 .iconReveal { display: block; flex: none; }
@@ -100,6 +112,7 @@
   .features { gap: .5rem; margin: .9rem 0 1.1rem; }
   .features li { font-size: .8125rem; }
   .promotionContainer { padding-block: 1.5rem; }
+  .promotionHeading { --worker-height: clamp(112px, 26vw, 148px); }
   .promotionGrid { grid-template-columns: minmax(0, 1fr); gap: 0; margin-top: 1.25rem; }
   .promotionItem { flex-direction: column; align-items: center; padding: .95rem 0; text-align: center; }
   .promotionItem + .promotionItem { border-top: 1px solid #edf1ed; }
@@ -111,12 +124,13 @@
   .promotionDescription { margin-top: .25rem; font-size: .8125rem; }
 }
 @media (max-width: 849px) {
-  .promotionHeading h2 { font-size: 1.5rem; line-height: 1.25; letter-spacing: -.025em; }
+  .promotionHeading { font-size: 1.75rem; }
 }
 @media (max-width: 479px) {
   .benefits, .container { width: calc(100% - 28px); }
   .benefits { padding: 1.25rem 0; }
   .cardHeading { gap: .65rem; }
+  .promotionHeading { font-size: clamp(1.125rem, 4.8vw, 1.375rem); }
 }
 @media (min-width: 1200px) and (hover: hover) and (pointer: fine) {
   .howSection { display: none; }
