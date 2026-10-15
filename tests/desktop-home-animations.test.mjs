@@ -6,7 +6,7 @@ import { DESKTOP_QUERY, DESKTOP_MOTION_QUERY } from "../src/app/home-hero/deskto
 
 const source = (path) => readFileSync(new URL(path, import.meta.url), "utf8");
 
-test("promotion motion remains desktop-only while step motion supports phones", () => {
+test("benefit and step motion support phones while other promotion motion remains desktop-only", () => {
   assert.equal(DESKTOP_QUERY, "(min-width: 1200px) and (hover: hover) and (pointer: fine)");
   assert.equal(DESKTOP_MOTION_QUERY, `${DESKTOP_QUERY} and (prefers-reduced-motion: no-preference)`);
   const layout = source("../src/app/home-promotions/action-choices.module.css");
@@ -19,7 +19,7 @@ test("promotion motion remains desktop-only while step motion supports phones", 
   const promotions = source("../src/app/home-promotions/HomePromotions.jsx");
   assert.ok(promotions.includes("<ActionChoices />"));
   assert.doesNotMatch(promotions, /websiteActions|styles\.howSection|Was möchten Sie tun/);
-  assert.ok(original.includes(`@media ${DESKTOP_MOTION_QUERY}`));
+  assert.ok(original.includes("@media (prefers-reduced-motion: no-preference)"));
   assert.ok(layout.includes("@media (prefers-reduced-motion: no-preference)"));
   assert.match(layout, /\.step\s*\{\s*overflow: hidden;/);
   assert.doesNotMatch(layout, /opacity:\s*0|visibility:\s*hidden|translateY/);

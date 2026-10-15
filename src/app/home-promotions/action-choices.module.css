@@ -17,22 +17,14 @@
 .number { padding-top: .15rem; color: #008080; font-size: 1.125rem; font-weight: 650; line-height: 1.4; font-variant-numeric: tabular-nums; }
 .step h3 { font-size: clamp(1.125rem, 1.6vw, 1.35rem); font-weight: 750; line-height: 1.4; letter-spacing: -.025em; text-wrap: balance; }
 .step p { max-width: 28rem; margin-top: .4rem; color: #64746d; font-size: .875rem; line-height: 1.75; }
-.business { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 2rem; margin-top: clamp(2.5rem, 5vw, 4rem); border-top: 1px solid #e2eae5; padding-top: 1.75rem; }
-.businessLabel { color: #007975; font-size: .75rem; font-weight: 750; }
-.businessCopy h3 { font-size: 1rem; font-weight: 750; line-height: 1.5; letter-spacing: -.015em; }
-.businessCopy p { margin-top: .25rem; color: #64746d; font-size: .8125rem; line-height: 1.7; }
-.businessLink { display: inline-flex; min-height: 2.75rem; align-items: center; justify-content: space-between; gap: 1rem; color: #007975; font-size: .8125rem; font-weight: 750; }
-.businessLink:hover { text-decoration: underline; text-underline-offset: .3rem; }
-.primaryLink:focus-visible, .businessLink:focus-visible { outline: 2px solid #008080; outline-offset: 5px; border-radius: .4rem; }
+.primaryLink:focus-visible { outline: 2px solid #008080; outline-offset: 5px; border-radius: .4rem; }
 .primaryLink:hover { background: #006b69; }
-.primaryLink:hover .arrow, .businessLink:hover .arrow { transform: translateX(3px); }
+.primaryLink:hover .arrow { transform: translateX(3px); }
 @media (max-width: 999px) {
   .container { width: calc(100% - 48px); }
   .layout { gap: 2.5rem; }
   .intro h2 { font-size: 2.4rem; }
   .stepContent { gap: .75rem; }
-  .business { grid-template-columns: minmax(0, 1fr) auto; gap: .65rem 1.5rem; }
-  .businessLabel { grid-column: 1 / -1; }
 }
 @media (max-width: 699px) {
   .container { padding-block: 2.5rem 2rem; }
@@ -43,8 +35,6 @@
   .stepContent { grid-template-columns: 2rem minmax(0, 1fr); gap: .8rem; padding: 1.25rem 0; }
   .step h3 { font-size: 1rem; }
   .step p { font-size: .8125rem; }
-  .business { grid-template-columns: minmax(0, 1fr); gap: .65rem; margin-top: 2rem; padding-top: 1.5rem; }
-  .businessLink { width: max-content; max-width: 100%; margin-top: .25rem; }
 }
 @media (max-width: 849px) {
   .intro h2 { font-size: 1.5rem; line-height: 1.25; letter-spacing: -.025em; }
@@ -56,7 +46,7 @@
 }
 @media (max-width: 1199px), (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
   .primaryLink, .arrow { transition: none; }
-  .primaryLink:hover .arrow, .businessLink:hover .arrow { transform: none; }
+  .primaryLink:hover .arrow { transform: none; }
 }
 @media (prefers-reduced-motion: no-preference) {
   .step { overflow: hidden; }

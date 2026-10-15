@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import PaintedServiceText from "./PaintedServiceText";
 import styles from "./mobile-service-promotion.module.css";
 
 export default function MobileServicePromotion() {
@@ -9,10 +10,11 @@ export default function MobileServicePromotion() {
         <div className={styles.visual}>
           <div className={styles.imageStage}>
             <Image
-              src="/images/home/service-on-your-phone.webp"
+              src="/images/home/service-on-your-phone-v2.webp?v=blonde"
               alt="Eine Frau sitzt im Schneidersitz und wählt auf ihrem Smartphone eine Dienstleistung bei ServiceHub aus."
               width={1254}
               height={1254}
+              quality={95}
               sizes="(max-width: 479px) 44vw, (max-width: 699px) 190px, (max-width: 999px) 46vw, 520px"
               className={styles.image}
             />
@@ -24,10 +26,7 @@ export default function MobileServicePromotion() {
             <h2 id="mobile-service-heading">
               <span className={styles.desktopCopy}>Ihr nächster Service.</span>
               <span className={styles.mobileCopy}>Ihr Service.</span>
-              <span className={styles.accent}>
-                <span className={styles.desktopCopy}>Nur ein paar Klicks entfernt.</span>
-                <span className={styles.mobileCopy}>Einfach per Handy.</span>
-              </span>
+              <PaintedServiceText />
             </h2>
           </div>
           <p className={styles.description}>

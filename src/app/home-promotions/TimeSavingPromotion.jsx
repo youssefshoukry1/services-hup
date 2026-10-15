@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import PaintedServiceText from "./PaintedServiceText";
 import styles from "./mobile-service-promotion.module.css";
 
 const thoughts = [
@@ -16,10 +17,7 @@ export default function TimeSavingPromotion() {
           <div className={styles.headline}>
             <h2 id="time-saving-heading">
               Keine Zeit?
-              <span className={styles.accent}>
-                <span className={styles.desktopCopy}>Überlassen Sie es den Profis.</span>
-                <span className={styles.mobileCopy}>Profis helfen weiter.</span>
-              </span>
+              <PaintedServiceText reverse />
             </h2>
           </div>
           <p className={styles.description}>

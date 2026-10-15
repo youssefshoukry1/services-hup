@@ -30,11 +30,6 @@ export default function ActionChoices() {
           </li>)}
         </StepScrollReveal>
       </div>
-      <aside className={styles.business} aria-labelledby="business-invitation-heading">
-        <span className={styles.businessLabel}>Für Unternehmen</span>
-        <div className={styles.businessCopy}><h3 id="business-invitation-heading">Neue Kunden erreichen</h3><p>Leistungen und Kontaktdaten präsentieren.</p></div>
-        <Link className={styles.businessLink} href="/add-company">Unternehmen eintragen <Arrow /></Link>
-      </aside>
     </div>
   </section>;
 }

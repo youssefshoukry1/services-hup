@@ -1,11 +1,14 @@
 "use client";
 
+import { useState } from "react";
 import styles from "./contact-section.module.css";
 
 const privacyUrl = process.env.NEXT_PUBLIC_PRIVACY_URL;
 const privacyHref = privacyUrl?.startsWith("https://") || privacyUrl?.startsWith("/") ? privacyUrl : null;
 
 export default function ContactSection() {
+  const [showPhone, setShowPhone] = useState(false);
+
   return (
     <section id="contact" className={styles.section} aria-labelledby="contact-heading">
       <div className={styles.container}>
@@ -19,15 +22,14 @@ export default function ContactSection() {
           <p className={styles.eyebrow}>Kontakt</p>
           <h2 id="contact-heading">Lassen Sie uns <span>sprechen.</span></h2>
           <p className={styles.description}>
-            Sie haben eine Frage zu ServiceHub oder möchten uns etwas mitteilen?
-            Hier ist Platz für Ihr Anliegen.
+            Eine Frage oder eine Idee? Schreiben Sie uns einfach.
           </p>
         </div>
 
         <form id="contact-form" className={styles.form} onSubmit={(event) => event.preventDefault()} aria-labelledby="contact-form-heading" aria-describedby="contact-preview-note">
           <div className={styles.formHeading}>
             <h3 id="contact-form-heading">Ihre Nachricht an uns</h3>
-            <p>Mit <span aria-hidden="true">*</span><span className="sr-only">einem Stern</span> markierte Felder sind erforderlich.</p>
+            <p><span aria-hidden="true">*</span><span className="sr-only">Mit einem Stern markierte</span> Pflichtfelder</p>
           </div>
 
           <div className={styles.fields}>
@@ -39,7 +41,18 @@ export default function ContactSection() {
               <label htmlFor="contact-email">E-Mail <span aria-hidden="true">*</span></label>
               <input id="contact-email" name="email" type="email" autoComplete="email" placeholder="name@beispiel.de" maxLength={254} required />
             </div>
-            <div className={styles.field}>
+            <button
+              type="button"
+              className={styles.phoneToggle}
+              aria-expanded={showPhone}
+              aria-controls="contact-phone-field"
+              onClick={() => setShowPhone((visible) => !visible)}
+            >
+              <span aria-hidden="true">{showPhone ? "−" : "+"}</span>
+              {showPhone ? "Telefonnummer ausblenden" : "Telefonnummer hinzufügen"}
+              <span className={styles.optional}>optional</span>
+            </button>
+            <div id="contact-phone-field" className={`${styles.field} ${styles.phoneField}`} data-expanded={showPhone}>
               <label htmlFor="contact-phone">Telefonnummer <span className={styles.optional}>(optional)</span></label>
               <input id="contact-phone" name="phone" type="tel" inputMode="tel" autoComplete="tel" placeholder="+49 151 12345678" maxLength={40} />
             </div>
