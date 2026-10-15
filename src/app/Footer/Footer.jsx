@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
 import styles from "./footer.module.css";
 
 const socialLinks = [
@@ -21,20 +20,8 @@ function SocialIcon({ type }) {
 }
 
 export default function Footer() {
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-  const [status, setStatus] = useState("");
-
-  function handleSubmit(event) {
-    event.preventDefault();
-    if (!email.trim() || !message.trim()) return;
-    setEmail("");
-    setMessage("");
-    setStatus("Formular geleert. Der Nachrichtenversand wird bald verfügbar sein.");
-  }
-
   return (
-    <footer id="contact" className={styles.footer}>
+    <footer className={styles.footer}>
       <div className={styles.container}>
         <div className={styles.top}>
           <div className={styles.brandColumn}>
@@ -53,19 +40,13 @@ export default function Footer() {
             <h2>Entdecken</h2>
             <Link href="/">Startseite</Link>
             <Link href="/dienstleister">Unternehmen entdecken</Link>
-            <a href="#contact-form">Kontakt</a>
+            <Link href="/#contact">Kontakt</Link>
           </nav>
 
           <div className={styles.contactColumn}>
-            <h2>Nachricht senden</h2>
-            <form id="contact-form" onSubmit={handleSubmit} className={styles.form}>
-              <label htmlFor="footer-email" className="sr-only">Ihre E-Mail-Adresse</label>
-              <input id="footer-email" type="email" autoComplete="email" required value={email} onChange={(event) => { setEmail(event.target.value); setStatus(""); }} placeholder="Ihre E-Mail-Adresse" />
-              <label htmlFor="footer-message" className="sr-only">Ihre Nachricht</label>
-              <textarea id="footer-message" required rows="3" maxLength="2000" value={message} onChange={(event) => { setMessage(event.target.value); setStatus(""); }} placeholder="Ihre Nachricht" />
-              <button type="submit">Senden <span aria-hidden="true">↗</span></button>
-              {status && <small role="status">{status}</small>}
-            </form>
+            <h2>Fragen oder Anregungen?</h2>
+            <p>Hier ist Platz für Ihr Anliegen.</p>
+            <Link href="/#contact" className={styles.contactLink}>Zum Kontaktformular <span aria-hidden="true">↗</span></Link>
           </div>
         </div>
 

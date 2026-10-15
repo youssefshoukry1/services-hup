@@ -1,6 +1,5 @@
 import Link from "next/link";
 import ServiceIcon from "../ServiceIcon";
-import TireHeadline from "./TireHeadline";
 import styles from "./service-promotion.module.css";
 
 const services = [
@@ -11,12 +10,14 @@ const services = [
 
 export default function ServicePromotion() {
   return (
-    <section className={styles.section} aria-labelledby="service-promotion-heading" data-service-promotion="">
+    <section className={styles.section} aria-labelledby="service-promotion-heading">
       <div className={styles.container}>
-        <TireHeadline />
+        <div className={styles.headline}>
+          <h2 id="service-promotion-heading">Wobei brauchen Sie Hilfe?</h2>
+        </div>
         <ul className={styles.grid}>
           {services.map((service) => (
-            <li key={service.id} data-promotion-item="">
+            <li key={service.id}>
               <Link href={`/services/${service.id}`} className={styles.card}>
                 <span className={styles.icon}><ServiceIcon type={service.id} /></span>
                 <div className={styles.copy}>

@@ -6,7 +6,7 @@ import { DESKTOP_QUERY, DESKTOP_MOTION_QUERY } from "../src/app/home-hero/deskto
 
 const source = (path) => readFileSync(new URL(path, import.meta.url), "utf8");
 
-test("motion remains desktop-only while the three-step layout is responsive", () => {
+test("promotion motion remains desktop-only while step motion supports phones", () => {
   assert.equal(DESKTOP_QUERY, "(min-width: 1200px) and (hover: hover) and (pointer: fine)");
   assert.equal(DESKTOP_MOTION_QUERY, `${DESKTOP_QUERY} and (prefers-reduced-motion: no-preference)`);
   const layout = source("../src/app/home-promotions/action-choices.module.css");
@@ -20,7 +20,7 @@ test("motion remains desktop-only while the three-step layout is responsive", ()
   assert.ok(promotions.includes("<ActionChoices />"));
   assert.doesNotMatch(promotions, /websiteActions|styles\.howSection|Was möchten Sie tun/);
   assert.ok(original.includes(`@media ${DESKTOP_MOTION_QUERY}`));
-  assert.ok(layout.includes(`@media ${DESKTOP_MOTION_QUERY}`));
+  assert.ok(layout.includes("@media (prefers-reduced-motion: no-preference)"));
   assert.match(layout, /\.step\s*\{\s*overflow: hidden;/);
   assert.doesNotMatch(layout, /opacity:\s*0|visibility:\s*hidden|translateY/);
 });
@@ -41,11 +41,8 @@ test("desktop effects are scoped and restore static state", () => {
   const heading = {};
   const promotions = [item(), item(), item()];
   promotions.forEach((promotion) => { promotion.parentElement = { children: promotions }; });
-  const stepContents = [{}, {}, {}];
-  const stepDividers = [{}, {}, {}];
-  const steps = stepContents.map((content, index) => ({ querySelector: (selector) => ({ "[data-step-content]": content, "[data-step-divider]": stepDividers[index] })[selector] }));
   const root = {
-    querySelectorAll: (selector) => ({ "[data-promotion-heading]": [heading], "[data-promotion-item]": promotions, "[data-action-step]": steps })[selector],
+    querySelectorAll: (selector) => ({ "[data-promotion-heading]": [heading], "[data-promotion-item]": promotions })[selector],
   };
   const sandbox = {
     gsap: {
@@ -61,18 +58,6 @@ test("desktop effects are scoped and restore static state", () => {
   vm.runInNewContext(animationCode, sandbox);
   const dispose = sandbox.mountHomeAnimations(root);
   assert.ok(calls.every(({ options }) => !options.scrollTrigger?.pin));
-  const stepReveals = calls.filter(({ target }) => stepContents.includes(target));
-  assert.equal(stepReveals.length, 3);
-  stepReveals.forEach(({ from, options }, index) => {
-    assert.equal(from.yPercent, -100);
-    assert.equal(options.yPercent, 0);
-    assert.equal(options.ease, "none");
-    assert.equal(options.scrollTrigger.trigger, stepDividers[index]);
-    assert.equal(options.scrollTrigger.start, "top bottom");
-    assert.equal(options.scrollTrigger.end, "bottom 60%");
-    assert.equal(options.scrollTrigger.scrub, true);
-    assert.equal(options.scrollTrigger.pin, undefined);
-  });
   const reveals = calls.filter(({ target }) => promotions.includes(target));
   assert.deepEqual(reveals.map(({ options }) => options.delay), [0, .15, .3]);
   reveals.forEach(({ target, options }) => {
@@ -87,7 +72,7 @@ test("desktop effects are scoped and restore static state", () => {
   assert.deepEqual(events, ["refreshed", "split reverted", "context reverted"]);
 });
 
-function mountMotionEffect(matches, loadAnimations) {
+function mountMotionEffect(matches, loadAnimations, steps = false) {
   let effect;
   const listeners = new Set();
   const media = {
@@ -98,17 +83,18 @@ function mountMotionEffect(matches, loadAnimations) {
   const root = {};
   const sandbox = {
     DESKTOP_MOTION_QUERY, loadAnimations, console,
-    window: { matchMedia(query) { assert.equal(query, DESKTOP_MOTION_QUERY); return media; } },
+    window: { matchMedia(query) { assert.equal(query, steps ? "(prefers-reduced-motion: no-preference)" : DESKTOP_MOTION_QUERY); return media; } },
     useRef: () => ({ current: root }),
     useEffect: (callback) => { effect = callback; },
   };
-  const component = source("../src/app/home-hero/HomeScrollTransition.jsx");
-  const code = component.slice(0, component.indexOf("  return <div"))
+  const component = source(steps ? "../src/app/home-promotions/StepScrollReveal.jsx" : "../src/app/home-hero/HomeScrollTransition.jsx");
+  const code = component.slice(0, component.indexOf(steps ? "  return <ol" : "  return <div"))
     .replace(/^import .*;\r?\n/gm, "")
     .replace("export default function", "function")
-    .replace('import("./desktop-home-animations")', "loadAnimations()") + "}";
+    .replace(steps ? 'import("./step-animations")' : 'import("./desktop-home-animations")', "loadAnimations()") + "}";
   vm.runInNewContext(code, sandbox);
-  sandbox.HomeScrollTransition({});
+  if (steps) sandbox.StepScrollReveal({});
+  else sandbox.HomeScrollTransition({});
   const dispose = effect();
   return {
     root, listeners, dispose,
@@ -117,6 +103,74 @@ function mountMotionEffect(matches, loadAnimations) {
 }
 
 const settle = () => new Promise((resolve) => setImmediate(resolve));
+
+test("step reveals use the desktop scroll effect at every screen size and clean up", () => {
+  const calls = [];
+  const events = [];
+  const contents = [{}, {}, {}];
+  const dividers = [{}, {}, {}];
+  const steps = contents.map((content, index) => ({
+    querySelector: (selector) => ({ "[data-step-content]": content, "[data-step-divider]": dividers[index] })[selector],
+  }));
+  const root = { querySelectorAll(selector) { assert.equal(selector, "[data-action-step]"); return steps; } };
+  const sandbox = {
+    gsap: {
+      registerPlugin() {},
+      context(fn, scope) { assert.equal(scope, root); fn(); return { revert: () => events.push("reverted") }; },
+      fromTo(target, from, options) { calls.push({ target, from, options }); },
+    },
+    ScrollTrigger: { refresh: () => events.push("refreshed") },
+  };
+  const code = source("../src/app/home-promotions/step-animations.js")
+    .replace(/^import .*;\r?\n/gm, "").replace("export function", "function");
+  vm.runInNewContext(code, sandbox);
+  const dispose = sandbox.mountStepAnimations(root);
+  assert.equal(calls.length, 3);
+  calls.forEach(({ target, from, options }, index) => {
+    assert.equal(target, contents[index]);
+    assert.equal(from.yPercent, -100);
+    assert.equal(options.yPercent, 0);
+    assert.equal(options.scrollTrigger.trigger, dividers[index]);
+    assert.equal(options.scrollTrigger.start, "top bottom");
+    assert.equal(options.scrollTrigger.end, "bottom 60%");
+    assert.equal(options.scrollTrigger.scrub, true);
+    assert.equal(options.scrollTrigger.pin, undefined);
+  });
+  dispose();
+  assert.deepEqual(events, ["refreshed", "reverted"]);
+});
+
+test("phone step animations mount and restore content when reduced motion is enabled", async () => {
+  let mounts = 0, disposals = 0;
+  const effect = mountMotionEffect(true, async () => ({
+    mountStepAnimations() { mounts++; return () => { disposals++; }; },
+  }), true);
+  await settle();
+  assert.equal(mounts, 1);
+  effect.change(false);
+  assert.equal(disposals, 1);
+  effect.change(true);
+  await settle();
+  assert.equal(mounts, 2);
+  effect.dispose();
+  assert.equal(disposals, 2);
+  assert.equal(effect.listeners.size, 0);
+});
+
+test("step animations skip loading for reduced motion and cannot mount after unmounting", async () => {
+  let resolveLoad, mounts = 0, loads = 0;
+  const effect = mountMotionEffect(false, () => {
+    loads++;
+    return new Promise((resolve) => { resolveLoad = resolve; });
+  }, true);
+  await settle();
+  assert.equal(loads, 0);
+  effect.change(true);
+  effect.dispose();
+  resolveLoad({ mountStepAnimations() { mounts++; } });
+  await settle();
+  assert.equal(mounts, 0);
+});
 
 test("phones do not download or mount scroll animations", async () => {
   let loads = 0;

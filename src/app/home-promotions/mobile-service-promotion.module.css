@@ -1,0 +1,217 @@
+.section {
+  overflow: clip;
+  border-top: 1px solid #e2ede7;
+  background: #f0f6f2;
+  color: #243932;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: clamp(2rem, 5vw, 5rem);
+  width: min(100% - 64px, 1120px);
+  margin: 0 auto;
+  padding: 4rem 0;
+}
+
+.visual {
+  min-width: 0;
+}
+
+.imageStage {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  border-radius: 1.5rem;
+  background: #f0f6f2;
+}
+
+.imageStage::before {
+  content: "";
+  position: absolute;
+  inset: 34% 2% 2%;
+  border: 1px solid rgb(0 128 128 / 8%);
+  border-radius: 50%;
+  background: linear-gradient(145deg, rgb(0 128 128 / 16%), rgb(0 128 128 / 6%));
+  pointer-events: none;
+}
+
+.image {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 1.5rem;
+  /* Let the existing pale photo backgrounds reveal the decorative backdrop. */
+  mix-blend-mode: darken;
+}
+
+.copy { min-width: 0; }
+.mobileCopy { display: none; }
+
+.eyebrow {
+  margin-bottom: 1rem;
+  color: #007975;
+  font-size: .75rem;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.copy h2 {
+  font-size: clamp(2rem, 3.6vw, 2.875rem);
+  font-weight: 800;
+  line-height: 1.18;
+  letter-spacing: -.04em;
+  text-wrap: balance;
+}
+
+.copy h2 .accent {
+  display: block;
+  margin-top: .15em;
+  color: #007975;
+}
+
+.description {
+  max-width: 29rem;
+  margin-top: 1.4rem;
+  color: #52665e;
+  font-size: .9375rem;
+  line-height: 1.8;
+}
+
+.cta {
+  display: inline-flex;
+  min-height: 3.25rem;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.75rem;
+  border-radius: .55rem;
+  background: #008080;
+  padding: .9rem 1.25rem;
+  color: #fff;
+  font-size: .875rem;
+  font-weight: 750;
+  text-decoration: none;
+  transition: background 180ms ease;
+}
+
+.cta svg { width: 1.2rem; height: 1.2rem; flex: none; }
+.cta:hover { background: #006b69; }
+.cta:focus-visible { outline: 2px solid #008080; outline-offset: 4px; }
+
+.timeSection { background: #fff; }
+.timeSection .imageStage { background: #fff; }
+.timeSection .imageStage::before {
+  background: linear-gradient(215deg, rgb(0 128 128 / 16%), rgb(0 128 128 / 6%));
+}
+.thinkingVisual { position: relative; padding-top: 6.5rem; }
+
+.thoughts {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 50%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .75rem;
+  width: min(100%, 400px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  transform: translateX(-50%);
+}
+
+.thought {
+  position: relative;
+  border: 1px solid #cfe1d8;
+  border-radius: 1.15rem;
+  background: #f0f6f2;
+  padding: .75rem .8rem;
+  color: #344d42;
+  font-size: .8125rem;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+  text-wrap: balance;
+  box-shadow: 0 4px 12px #19312e06;
+}
+
+.thought::before,
+.thought::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  border: 1px solid #cfe1d8;
+  border-radius: 50%;
+  background: #f0f6f2;
+}
+
+.thought::before { bottom: -12px; width: 8px; height: 8px; }
+.thought::after { bottom: -20px; left: 53%; width: 4px; height: 4px; }
+.thought:first-child { transform: rotate(-4deg); }
+.thought:nth-child(2) { transform: rotate(4deg); }
+.thought:last-child { grid-column: 1 / -1; justify-self: center; }
+.thought:last-child::before { left: 48%; }
+.thought:last-child::after { left: 46%; }
+.thirdThoughtDot {
+  position: absolute;
+  bottom: -27px;
+  left: 44%;
+  width: 3px;
+  height: 3px;
+  border: 1px solid #cfe1d8;
+  border-radius: 50%;
+  background: #f0f6f2;
+  pointer-events: none;
+}
+
+@media (max-width: 999px) {
+  .container { width: calc(100% - 48px); gap: 2rem; padding: 3rem 0; }
+  .copy h2 { font-size: clamp(1.75rem, 3.6vw, 2.25rem); }
+}
+
+@media (max-width: 699px) {
+  .section { scroll-margin-top: 76px; }
+  .container {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .875rem 1rem;
+    width: min(100% - 40px, 480px);
+    padding: 1.75rem 0;
+  }
+  .visual { grid-column: 1; grid-row: 1; justify-self: start; width: min(100%, 190px); margin: 0; }
+  .imageStage, .image { border-radius: 1rem; }
+  .copy { display: contents; }
+  .headline { grid-column: 2; grid-row: 1; min-width: 0; text-align: left; }
+  .desktopCopy { display: none; }
+  .mobileCopy { display: inline; }
+  .eyebrow { margin-bottom: .5rem; font-size: .625rem; line-height: 1.5; letter-spacing: .08em; }
+  .copy h2 { font-size: clamp(1.125rem, 5.3vw, 1.5rem); line-height: 1.2; letter-spacing: -.03em; text-wrap: pretty; }
+  .copy h2 .accent { margin-top: .1em; }
+  .description { grid-column: 1 / -1; grid-row: 2; max-width: 100%; margin: 0; font-size: .875rem; line-height: 1.6; text-align: left; text-wrap: pretty; }
+  .cta { grid-column: 1 / -1; grid-row: 3; justify-self: start; width: auto; max-width: 100%; min-height: 44px; gap: .6rem; margin-top: .125rem; padding: .65rem 1rem; font-size: .8125rem; }
+  .cta svg { width: 1rem; height: 1rem; }
+  .timeSection .headline { grid-column: 1; }
+  .timeSection .description { grid-column: 2; font-size: .8125rem; line-height: 1.55; direction: rtl; text-align: right; }
+  .timeSection .cta { grid-column: 2; justify-self: end; direction: rtl; text-align: right; gap: .5rem; padding-inline: .75rem; font-size: .75rem; }
+  .timeSection .cta svg { transform: scaleX(-1); }
+  .thinkingVisual { grid-column: 2; justify-self: end; padding-top: 3.5rem; }
+  .thinkingVisual .imageStage { width: 100%; margin: 0; }
+  .thoughts { grid-template-columns: repeat(2, max-content); justify-content: center; width: max-content; gap: .25rem; }
+  .thought { padding: .2rem .3rem; font-size: .625rem; line-height: 1.25; white-space: nowrap; }
+  .thought::before { bottom: -8px; width: 5px; height: 5px; }
+  .thought::after { bottom: -13px; width: 3px; height: 3px; }
+  .thirdThoughtDot { bottom: -18px; width: 2px; height: 2px; }
+  .thought:first-child { transform: rotate(-2deg); }
+  .thought:nth-child(2) { transform: rotate(2deg); }
+}
+
+@media (max-width: 479px) {
+  .container { width: calc(100% - 28px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta { transition: none; }
+}

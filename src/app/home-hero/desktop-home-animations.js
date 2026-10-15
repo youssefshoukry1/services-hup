@@ -29,18 +29,6 @@ export function mountHomeAnimations(root) {
       });
     });
 
-    // A/02's stats rows reveal from above their stationary divider, tied to scroll.
-    // Animate just one container per step, without text splitting or filters.
-    root.querySelectorAll("[data-action-step]").forEach((step) => {
-      gsap.fromTo(step.querySelector("[data-step-content]"), { yPercent: -100 }, {
-        yPercent: 0, ease: "none", force3D: "auto",
-        scrollTrigger: {
-          trigger: step.querySelector("[data-step-divider]"),
-          start: "top bottom", end: "bottom 60%", scrub: true,
-          toggleActions: "play none none reverse",
-        },
-      });
-    });
   }, root);
 
   ScrollTrigger.refresh();

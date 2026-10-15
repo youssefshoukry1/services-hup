@@ -1,0 +1,11 @@
+{
+  "mode": "built-in image_gen",
+  "prompt": "Use case: photorealistic-natural / ads-marketing.\nAsset type: website promotional lifestyle photograph matching a minimalist German ServiceHub site.\nUse the latest user-attached portrait as the identity and clothing reference: preserve this same man's recognizable face, short wavy brown hair, full dark beard, natural complexion, mustard yellow/gray-blue checked open shirt over dark olive green T-shirt and dark jeans.\nShow the SAME MAN now seated comfortably CROSS-LEGGED on the floor in full-body three-quarter SIDE VIEW, facing LEFT toward the promotional text beside him. His bare right hand rests naturally against his temple/forehead as if thinking \"I have no time to fix this myself, I need a professional quickly\". Thoughtful, slightly concerned but approachable expression, looking slightly down toward the left. Other bare hand rests loosely on knee. No smartphone, no gloves, no trash bag. Anatomically natural hand gesture with fingers resting on the side of his forehead, not covering face.\nComposition: square 1:1 canvas; entire seated figure with both crossed legs and feet visible, clean comfortable margins, man centered. Subject fills most of the square, with a small amount of free space above the head. The website will add three thought bubbles as editable HTML above the photograph, so DO NOT draw any bubbles or any text in the image.\nClean soft editorial studio lighting and real skin/clothing texture. Background is perfectly plain WHITE #ffffff across the entire canvas, with a subtle natural contact shadow beneath seated figure. No scenery, no furniture, no props, no decorations, no colored outlines or floating artifacts, no watermark. Photorealistic premium marketing photograph.",
+  "asset": "public/images/home/no-time-for-repairs.webp",
+  "thoughtBubbles": [
+    "Ich habe keine Zeit.",
+    "Ich brauche Profis.",
+    "Es muss schnell gehen."
+  ],
+  "thoughtBubbleRendering": "HTML and CSS above the generated photograph"
+}

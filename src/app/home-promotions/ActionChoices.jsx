@@ -1,4 +1,5 @@
 import Link from "next/link";
+import StepScrollReveal from "./StepScrollReveal";
 import styles from "./action-choices.module.css";
 
 const steps = [
@@ -19,7 +20,7 @@ export default function ActionChoices() {
           <h2 id="how-it-works-heading">In drei Schritten<br /><em>zum passenden Profi.</em></h2>
           <Link className={styles.primaryLink} href="/dienstleister">Dienstleister entdecken <Arrow /></Link>
         </header>
-        <ol className={styles.steps} aria-label="In drei Schritten zur passenden Hilfe">
+        <StepScrollReveal className={styles.steps}>
           {steps.map((step, index) => <li className={styles.step} key={step.title} data-action-step="">
             <span className={styles.stepTrigger} data-step-divider="" aria-hidden="true" />
             <div className={styles.stepContent} data-step-content="">
@@ -27,7 +28,7 @@ export default function ActionChoices() {
               <div><h3>{step.title}</h3><p>{step.description}</p></div>
             </div>
           </li>)}
-        </ol>
+        </StepScrollReveal>
       </div>
       <aside className={styles.business} aria-labelledby="business-invitation-heading">
         <span className={styles.businessLabel}>Für Unternehmen</span>
