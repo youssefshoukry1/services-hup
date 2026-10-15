@@ -29,7 +29,8 @@ export default function TimeSavingPromotion() {
               Arbeit abnehmen. So bleibt mehr Zeit für das, was Ihnen wichtig ist.
             </span>
             <span className={styles.mobileCopy}>
-              Service auswählen, passende Profis finden und Zeit für das Wichtige gewinnen.
+              <bdi>Service auswählen.</bdi><br />
+              <bdi>Mehr Zeit für Sie.</bdi>
             </span>
           </p>
           <Link href="/dienstleister" className={styles.cta}>
